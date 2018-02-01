@@ -1,0 +1,38 @@
+\documentclass[a4paper,11pt]{scrartcl}
+\usepackage{fullpage}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{commath}
+% \usepackage{array}
+% \usepackage{multirow}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+\usepackage{amsthm}
+
+\newcommand*{\dt}{\dif{}t}
+\newcommand*{\Sm}[1]{\sum_{n=0}^{N-1}{#1}}
+\newcommand*{\D}{\Delta}
+% \newcommand*{\Wn}{W(t_n)}
+% \newcommand*{\Wn1}{W(t_{n+1})}
+\begin{document}
+
+
+\begin{IEEEeqnarray*}{rCl}
+\Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} & = & \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} + \frac{\Sm{(\D W)^2}}{2} - \frac{\Sm{(\D W)^2}}{2} \\
+
+& = & \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} \\
+& & + \frac{\Sm{(W(t_{n+1}) - W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2}  \\
+& & - \frac{\Sm{(\D W)^2}}{2} \\
+
+& = & \frac{\Sm{(W(t_{n+1}) + W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2} - \frac{\Sm{\D t}}{2} \\
+& = & \frac{\Sm{W(t_{n+1})^2 - W(t_n)^2}}{2} - \frac{T}{2} \\
+& = & \frac{W(T)^2 - W(0)^2}{2} - \frac{T}{2} = \frac{W(T)^2}{2} - \frac{T}{2}
+\end{IEEEeqnarray*}
+\begin{IEEEeqnarray*}{rCl}
+\int_0^T{W_t \dif{}W_t} & = & 
+\end{IEEEeqnarray*}
+
+\end{document}
