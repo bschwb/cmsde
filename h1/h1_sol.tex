@@ -6,33 +6,105 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{commath}
-% \usepackage{array}
-% \usepackage{multirow}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
 \usepackage{amsthm}
 
 \newcommand*{\dt}{\dif{}t}
+\newcommand*{\dW}{\dif{}W_t}
 \newcommand*{\Sm}[1]{\sum_{n=0}^{N-1}{#1}}
+\newcommand*{\Smm}[1]{\sum_{m=0}^{N-1}{#1}}
 \newcommand*{\D}{\Delta}
-% \newcommand*{\Wn}{W(t_n)}
-% \newcommand*{\Wn1}{W(t_{n+1})}
+\newcommand*{\E}{\mathbb{E}}
+\newcommand*{\EV}[1]{\E\left[{#1}\right]}
 \begin{document}
 
 
-\begin{IEEEeqnarray*}{rCl}
-\Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} & = & \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} + \frac{\Sm{(\D W)^2}}{2} - \frac{\Sm{(\D W)^2}}{2} \\
+The Euler discretization of
+$\int_0^T{W_t \dW}$ is
+$\Sm{W(t_{n})(\D W_n)}$.
+We will show, that independent of $\D t_n$ this discretization is a.s. equal to
+$\frac{W(T)^2}{2} - \frac{T}{2}$.
+From the definition of the It\^{o}-Integral as the $\bold{L}^2$-convergence of the forward
+Euler discretization (Theorem 2.10) we then get
+\[\int_0^T{W_t \dif{}W_t} = \frac{W(T)^2}{2} - \frac{T}{2}\]
 
-& = & \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} \\
-& & + \frac{\Sm{(W(t_{n+1}) - W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2}  \\
-& & - \frac{\Sm{(\D W)^2}}{2} \\
+To show the equality of the discretization to $\frac{W(T)^2}{2} - \frac{T}{2}$
+we use, that the variance of the Wiener process incremts are $\E[(\D W_n)^2] = \D t_n$.
 
-& = & \frac{\Sm{(W(t_{n+1}) + W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2} - \frac{\Sm{\D t}}{2} \\
-& = & \frac{\Sm{W(t_{n+1})^2 - W(t_n)^2}}{2} - \frac{T}{2} \\
-& = & \frac{W(T)^2 - W(0)^2}{2} - \frac{T}{2} = \frac{W(T)^2}{2} - \frac{T}{2}
-\end{IEEEeqnarray*}
 \begin{IEEEeqnarray*}{rCl}
-\int_0^T{W_t \dif{}W_t} & = & 
+  \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} + \frac{\Sm{(\D W_n)^2}}{2} & = & \\
+  \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} + \frac{\Sm{(W(t_{n+1}) - W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2} & = & \\
+\frac{\Sm{(W(t_{n+1}) + W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2}  & = & \\
+\frac{\Sm{W(t_{n+1})^2 - W(t_n)^2}}{2} & = &\\
+\frac{W(T)^2 - W(0)^2}{2} & = & \frac{W(T)^2}{2} \\
 \end{IEEEeqnarray*}
+
+\begin{IEEEeqnarray*}{rCl}
+\E\left[\left|\Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} - \left(\frac{W(T)^2}{2} -
+\frac{T}{2}\right) \right| \right] & = & \\
+\E\left[\left|\Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} - \frac{W(T)^2}{2} +
+\frac{\Sm{\D t_n}}{2} \right| \right] & = & \\
+\E\left[\left|-\frac{\Sm{(\D W_n)^2}}{2} + \frac{\Sm{\E[(\D W_n)^2]}}{2} \right|\right] \\
+\end{IEEEeqnarray*}
+% \begin{IEEEeqnarray*}{rCl}
+% \E\left[\left(\int_0^T{W_t \dif{}W_t} - \left(\frac{W(T)^2}{2} - \frac{T}{2}\right) \right)^2\right] & = &
+% \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} \\
+% & = & \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} + \frac{\Sm{(\D W_n)^2}}{2} - \frac{\Sm{(\D W_n)^2}}{2} \\
+
+% & = & \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} \\
+% & & + \frac{\Sm{(W(t_{n+1}) - W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2}  \\
+% & & - \frac{\Sm{(\D W_n)^2}}{2} \\
+
+% & = & \frac{\Sm{(W(t_{n+1}) + W(t_{n}))(W(t_{n+1}) - W(t_{n}))}}{2} - \frac{\Sm{\D t_n}}{2} \\
+% & = & \frac{\Sm{W(t_{n+1})^2 - W(t_n)^2}}{2} - \frac{T}{2} \\
+% & = & \frac{W(T)^2 - W(0)^2}{2} - \frac{T}{2} = \frac{W(T)^2}{2} - \frac{T}{2}
+% \end{IEEEeqnarray*}
+\pagebreak
+
+\[ \EV{\int_0^T f(t, \cdot) \dW \int_0^T g(t, \cdot) \dW} = \int_0^T
+  \EV{f(t,\cdot) g(t, \cdot)} \dt \]
+
+We start by showing, that the Euler discretizations are equal.
+\begin{IEEEeqnarray*}{rR}
+\EV{\Sm{f(t_n, \cdot) \D W(t_n) \Sm{g(t_n, \cdot) \D W(t_n)}}} & = \\
+\Sm{\Smm{\EV{f(t_m, \cdot) \D W(t_m) g(t_n, \cdot) \D W(t_n)}}} & = \\
+2 \sum_{n < m}^{N-1}{\EV{f(t_m, \cdot) \D W(t_m) g(t_n, \cdot) \D W(t_n)}} +
+\sum_{n=0}^{N-1}{\EV{f(t_n, \cdot) g(t_n, \cdot) (\D W(t_n))^2}} \\
+\end{IEEEeqnarray*}
+We now use, that $f$ and $g$ are adapted and the independence of the increments:
+\[
+2 \sum_{n < m}^{N-1}{\EV{\D W(t_m)}\EV{f(t_m, \cdot) g(t_n, \cdot) \D W(t_n)}} +
+\sum_{n=0}^{N-1}{\EV{(\D W(t_n))^2}\EV{f(t_n, \cdot) g(t_n, \cdot)}}
+\]
+For the first term we use $\EV{\D W(t_m)} = 0$ and for the second term
+$\EV{(\D W(t_n))^2} = \D t$ to get
+\[ \sum_{n=0}^{N-1}{\D t_n \EV{f(t_n, \cdot) g(t_n, \cdot)}} \]
+
+Now we can add the two equal Euler discretizations as $0$:
+\begin{IEEEeqnarray*}{rR}
+  \left|
+    \EV{\int_0^T f(t, \cdot) \dW \int_0^T g(t, \cdot) \dW}
+    - \int_0^T \EV{f(t,\cdot) g(t, \cdot)} \dt
+  \right| & = \\
+  \left|
+    \EV{\int_0^T f(t, \cdot) \dW \int_0^T g(t, \cdot) \dW}
+    - \EV{\Sm{f(t_n, \cdot) \D W(t_n) \Sm{g(t_n, \cdot) \D W(t_n)}}}
+  \right. & \\
+  \left.
+    + \sum_{n=0}^{N-1}{\EV{f(t_n, \cdot) g(t_n, \cdot)} \D t_n}
+    - \int_0^T \EV{f(t,\cdot) g(t, \cdot)} \dt
+  \right| & \leq \\
+  \sqrt{ \EV{ \left(
+        \int_0^T f(t, \cdot) \dW \int_0^T g(t, \cdot) \dW
+        - \Sm{f(t_n, \cdot) \D W(t_n) \Sm{g(t_n, \cdot) \D W(t_n)}}
+  \right)^2 } } & \\
+  \left.
+    + \sum_{n=0}^{N-1}{\EV{f(t_n, \cdot) g(t_n, \cdot)} \D t_n}
+    - \int_0^T \EV{f(t,\cdot) g(t, \cdot)} \dt
+  \right| & \rightarrow 0
+\end{IEEEeqnarray*}
+The first term converges to zero by definition of the It\^{o} integral and the
+second term by definition of the Riemann integral.
 
 \end{document}
