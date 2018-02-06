@@ -1,7 +1,10 @@
 \documentclass[a4paper,11pt]{scrartcl}
-\usepackage{fullpage}
 \usepackage[utf8]{inputenc}
 \usepackage[english]{babel}
+
+\usepackage[headsepline]{scrlayer-scrpage}
+\ohead{Bernd Schwarzenbacher}
+\ihead{HW1}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -17,42 +20,42 @@
 \newcommand*{\D}{\Delta}
 \newcommand*{\E}{\mathbb{E}}
 \newcommand*{\EV}[1]{\E\left[{#1}\right]}
+
 \begin{document}
-
-
-The Euler discretization of $\int_0^T{W_t \dW}$ is $\Sm{W(t_{n})\D W_n}$.
-
+We show that: \[\int_0^T{W_t \dW} = \frac{W(T)^2}{2} - \frac{T}{2}\]
+The Euler discretization of the integral is $\Sm{W(t_{n})\D W_n}$.
+To get the first term of the right hand side we can add the square increments:
 \begin{IEEEeqnarray*}{rCl}
   2 \Sm{W(t_{n})\D W} + \Sm{(\D W_n)^2} & = & 
   2 \Sm{W(t_{n})(W(t_{n+1}) - W(t_{n}))} \\
   & &
   + \Sm{(W(t_{n+1}) - W(t_{n}))(W(t_{n+1}) - W(t_{n}))} \\
   & = & \Sm{(W(t_{n+1}) + W(t_{n}))(W(t_{n+1}) - W(t_{n}))} \\
-  & = & \Sm{W(t_{n+1})^2 - W(t_n)^2} \\
-  & = & W(T)^2 - W(0)^2 = W(T)^2 \\
+  & = & \Sm{W(t_{n+1})^2 - W(t_n)^2} = W(T)^2 - W(0)^2 = W(T)^2 \\
 \end{IEEEeqnarray*}
-The variance for the increments of a Wiener process are normaly distributed with
-variance $\EV{(\D W_n)^2} = \D t_n$. Thus follows:
-\[ \EV{\Sm{(\D W_n)^2}} = \Sm{\D t_n} = T\]
-The kurtosis for the normal distribution is $3$ so $\EV{(\D W_n)^4} = 3 (\D
-t_n)^2$.
-The independence of the increments together with $\EV{(\D W_n)^2 - \D t_n} = 0$
-leads to:
+To get the second term, observe that the increments of a Wiener process are normaly distributed with
+variance $\EV{(\D W_n)^2} = \D t_n$ and
+the kurtosis for the normal distribution is $3$ so $\EV{(\D W_n)^4} = 3 (\D
+t_n)^2$
+This and the independence of the increments together with $\EV{(\D W_n)^2 - \D t_n} = 0$
+gets rid of the cross terms in the following:
 \[
   \EV{ \left( \Sm{(\D W_n)^2} - T \right)^2 } =
-  \EV{ \left( \Sm{(\D W_n)^2} - \Sm{\D t_n} \right)^2 } =
+  \EV{ \left( \Sm{(\D W_n)^2} - \Sm{\D t_n} \right)^2 } \]
+\[ =
   \EV{\Sm{(\D W_n)^4 - 2 (\D W_n)^2 \D t_n + (\D t_n)^2}} \]
 \[  = \Sm{3 (\D t_n)^2 - 2 (\D t_n)^2 + (\D t_n)^2}  = 2 \Sm{(\D t_n)^2} \leq 2
   T \max_n{\D t_n} \rightarrow 0\]
-
 Which all together gives:
 \[ \Sm{W(t_n) \D W_n} \overset{\bold{L}^2}{\longrightarrow} \frac{W(T)^2}{2} - \frac{T}{2}\]
+As the $\bold{L}^2$-limit of the forward Euler discretization is the definition of the
+It\^{o} integral we arrived at the desired equality.
 
 \pagebreak
-
+We show that:
 \[ \EV{\int_0^T f(t, \cdot) \dW \int_0^T g(t, \cdot) \dW} = \int_0^T
   \EV{f(t,\cdot) g(t, \cdot)} \dt \]
-We start by showing, that the Euler discretizations are equal.
+We start by showing, that the Euler discretizations are equal:
 \begin{IEEEeqnarray*}{rR}
 \EV{\Sm{f(t_n, \cdot) \D W(t_n) \Sm{g(t_n, \cdot) \D W(t_n)}}} & = \\
 \Sm{\Smm{\EV{f(t_m, \cdot) \D W(t_m) g(t_n, \cdot) \D W(t_n)}}} & = \\
@@ -67,7 +70,6 @@ We now use, that $f$ and $g$ are adapted and the independence of the increments:
 For the first term we use $\EV{\D W(t_m)} = 0$ and for the second term
 $\EV{(\D W(t_n))^2} = \D t$ to get
 \[ \sum_{n=0}^{N-1}{\D t_n \EV{f(t_n, \cdot) g(t_n, \cdot)}} \]
-
 Now we can add the two equal Euler discretizations as $0$:
 \begin{IEEEeqnarray*}{rR}
   \left|
