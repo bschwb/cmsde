@@ -17,6 +17,8 @@
 \newcommand*{\dt}{\dif{}t}
 \newcommand*{\dX}{\dif{}X(t)}
 \newcommand*{\dW}{\dif{}W(t)}
+\newcommand*{\Xb}{\bar{X}}
+
 \newcommand*{\D}{\Delta}
 \newcommand*{\E}{\mathbb{E}}
 \newcommand*{\EV}[1]{\E\left[{#1}\right]}
@@ -29,6 +31,8 @@
     \dX & = & a(t, X(t)) \dt + b(t, X(t)) dW \\
     X(0) & = & x_0
 \end{IEEEeqnarray*}
+$\Xb_0 = x_0$
+\[\Xb_{n+1} = \Xb_n + a(t_n, \Xb_n) \D t + b(t_n, \Xb_n) \D W_n\]
 \end{enumerate}
 
 \end{document}
