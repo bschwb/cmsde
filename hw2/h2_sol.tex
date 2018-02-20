@@ -3,9 +3,9 @@
 \usepackage[english]{babel}
 
 \usepackage[headsepline]{scrlayer-scrpage}
-\ohead{Bernd Schwarzenbacher}
+\ihead{Bernd Schwarzenbacher}
 \chead{CMSDE HW2}
-\ihead{\today}
+\ohead{\today}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -15,7 +15,8 @@
 \usepackage{amsthm}
 
 \newcommand*{\dt}{\dif{}t}
-\newcommand*{\dX}{\dif{}X(t)}
+\newcommand*{\dY}{\dif{}Y}
+\newcommand*{\dX}{\dif{}X}
 \newcommand*{\dW}{\dif{}W(t)}
 \newcommand*{\Xb}{\bar{X}}
 
@@ -28,11 +29,53 @@
 \begin{enumerate}
 \item
 \begin{IEEEeqnarray*}{rCl}
-    \dX & = & a(t, X(t)) \dt + b(t, X(t)) dW \\
+    \dX(t) & = & a(t, X(t)) \dt + b(t, X(t)) dW \\
     X(0) & = & x_0
 \end{IEEEeqnarray*}
 $\Xb_0 = x_0$
 \[\Xb_{n+1} = \Xb_n + a(t_n, \Xb_n) \D t + b(t_n, \Xb_n) \D W_n\]
+
+\item
+\begin{enumerate}
+\item
+  We use the diagonalization of $A = T^{-1} \Lambda T$, where $T$ is an
+  invertible matrix and $\Lambda~=~\text{diag}(\lambda_1, \lambda_2)$ is the
+  diagonal matrix of eigenvalues. Further we will only consider the transformed
+  system
+  \[\dY_t = \Lambda Y_t \dt, \quad \text{with } Y_t = T X_t\]
+  To obtain the exact solution, the system can now be solved separately for each component.
+  \begin{IEEEeqnarray*}{rCl}
+    y_1(t) &=& e^{\lambda_1 t} = e^{t} \\
+    y_2(t) &=& e^{\lambda_2 t} = e^{-10^5 t}
+  \end{IEEEeqnarray*}
+  Using a method for this system is like solving two 1-dimensional ODE's with the same method.
+  For each component the backwards Euler method gives:
+  \[ y_{n+1} = y_n + \lambda y_{n+1} \D t \Rightarrow y_{n+1} = \frac{1}{1 - \lambda \D t}
+    y_n = g(\lambda \D t) y_n \]
+
+  The function $g(z) = \frac{1}{1 - z}$ is called the stability function.
+
+  In contrast for the forward Euler method we get $g(z) = 1 + z$:
+  \[ y_{n+1} = y_n + \lambda y_n \D t = (1 + \lambda \D t) y_n \]
+  With the stability function we can generally express the discrete solution
+  in dependence of the start value as \[y_n = g(\lambda \D t)^n y_0\]
+
+  So in the case of forward Euler we will get oscillating and exploding
+  solutions for $\lambda \D t < -1$.
+  Therefore to solve the second component we would need a step size of $\D t < 10^{-5}$, which
+  is then excessively small for the first component.
+
+  The backward Euler methods gives a decreasing solution for the second equation
+  even for big step sizes and to get an increasing solution for the first
+  equation we need $\lambda_1 \D t < 1$, so in our case $\D t < 1$ which is feasible.
+\item
+  \[\dX = a X_t \dt + b X_t \dW_t\]
+  \[X(t_{n+1}) - X(t_n) = a X(t_{n+1}) (t_{n+1} - t_{n}) + b X(t_{n+1}) (W_{n+1}
+    - W_n)\]
+  % So does this give a proper It\hat{o} itegral? Probably not? Maybe use
+  % translation to Stratonovich? Ingver says something about relating convergence
+  % via cauchy sequences.
+\end{enumerate}
 \end{enumerate}
 
 \end{document}
