@@ -10,6 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{commath}
+\usepackage[makeroom]{cancel}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
 \usepackage{amsthm}
@@ -23,6 +24,7 @@
 \newcommand*{\D}{\Delta}
 \newcommand*{\E}{\mathbb{E}}
 \newcommand*{\EV}[1]{\E\left[{#1}\right]}
+\newcommand*{\Lt}[1]{\EV{\left({#1}\right)^2}}
 
 \begin{document}
 
@@ -69,12 +71,36 @@ $\Xb_0 = x_0$
   even for big step sizes and to get an increasing solution for the first
   equation we need $\lambda_1 \D t < 1$, so in our case $\D t < 1$ which is feasible.
 \item
+  For the SDE
   \[\dX = a X_t \dt + b X_t \dW_t\]
-  \[X(t_{n+1}) - X(t_n) = a X(t_{n+1}) (t_{n+1} - t_{n}) + b X(t_{n+1}) (W_{n+1}
-    - W_n)\]
-  % So does this give a proper It\hat{o} itegral? Probably not? Maybe use
-  % translation to Stratonovich? Ingver says something about relating convergence
-  % via cauchy sequences.
+  we formulate following method: apply backwards Euler for the drift part and
+  forward Euler for the diffusion term.
+  The heuristic is to to get similar behaviour as in 2a) for the drift part and
+  still obtain an It\^{o} integral for the diffusion term:
+  \[X(t_{n+1}) - X(t_n) = a X(t_{n+1}) \D t + b X(t_n) \D W \]
+  With this idea the update is explicitely given by:
+  \[X(t_{n+1}) = \frac{1 + b \D W}{1 - a \D t} X(t_n)\]
+
+  We will compare it to the complete forward Euler discretization, for which we
+  know convergence in $L^2$ from Theorem 3.1.
+  \[\Xb(t_{n+1}) = (a \D t + b \D W) \Xb(t_n)\]
+  Let's compute the $L^2$-difference of the two methods:
+  \[\Lt{\Xb(t_{n+1}) - X(t_{n+1})} = \Lt{a \D t + b \D W - \frac{b \D W + 1}{1 - a \D t}}
+    \Lt{\Xb(t_{n}) - X(t_n)} \]
+  \[ = \Lt{\frac{a \D t - a^2 \D t^2 +\cancel{b \D W} - a b \D t \D W -\cancel{b \D
+       W} + 1}{1 - a \D t}}
+    \Lt{\Xb(t_{n}) - X(t_n)} \]
+  Squaring and using $\EV{\D W} = 0$ as well as $\EV{(\D W)^2} = \D t$:
+  \[ = \frac{\cancel{a^2 \D t^2} - 2 a^3 \D t^3 + a^4 \D t^4 +
+     2 a \D t -\cancel{a^2 \D t^2} -2 a^2 b^2 \D t^3 + 1}{(1 - a \D t)^2}
+     \Lt{\Xb(t_n) - X(t_n)}
+  \]
+
+Now the the fraction is bounded for some small $c \geq \D t \geq 0$, where c is
+dependent on $a < 0$ and $b > 0$.
+
+By assuming \[ \Lt{\Xb(t_0) - X(t_0)} \leq K \D t \]
+we get $L^2$-equivalence of the methods in the limit $\D t \rightarrow 0$.
 \end{enumerate}
 \end{enumerate}
 
