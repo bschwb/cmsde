@@ -60,32 +60,40 @@ I evaluated the weak error for the following functions:
 I simulated with $10^5$ samples per Monte Carlo approximation.
 For the plots I used $\mu = \sigma = 1$.
 
-The first graph shows the strong error together with a fitted square root function:
+We see in~\figref{fig:strong}, that the strong error declines with $O(\sqrt{\D t})$ as predicted by Theorem 3.1.
+
+For the sufficiently fast declining function $g_1$ we get linear convergence as
+stated in Theorem 5.8.
+
+We also get linear weak error convergence for $g_2$ although
+$\lim_{x\rightarrow\infty}g_2(x) \neq 0$.
+Finally we are able to get non linear convergence for $g_3$.
 \begin{figure}[h]
   \centering
 \includegraphics[width=0.5\textwidth]{strong_error.pdf}
-\caption{Strong error square root convergence}
+\caption{Strong error with fitted square root function}
 \label{fig:strong}
 \end{figure}
-We see in~\figref{fig:strong}, that the error declines with $O(\sqrt{\D t})$ as predicted by Theorem 3.1.
 
   \begin{figure}
   \centering
     \includegraphics[width=0.5\textwidth]{weak_error1.pdf}
-    \caption{Weak error for $g_1$ with linear convergence}
+    \caption{Weak error for $g_1$ with fitted linear function}
+    \label{fig:weak1}
   \end{figure}
   \begin{figure}
   \centering
-    \includegraphics[width=0.4\textwidth]{weak_error2.pdf}
-    \caption{Linear weak error convergence although $\lim_{x\rightarrow\infty}g_2(x) \neq 0$}
+    \includegraphics[width=0.5\textwidth]{weak_error2.pdf}
+    \caption{Weak error for $g_2$ with fitted linear function}
+    \label{fig:weak2}
   \end{figure}
 \end{figure}
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{weak_error3.pdf}
-  \caption{No convergence because $g_3 \notin L^2$}
+    \caption{Weak error for $g_3$ with fitted linear function}
+    \label{fig:weak3}
 \end{figure}
-\pagebreak
 
 \item
 \begin{enumerate}
@@ -154,9 +162,10 @@ we get $L^2$-equivalence of the methods in the limit $\D t \rightarrow 0$.
 \end{enumerate}
 \end{enumerate}
 
+\section*{Code Appendix}
 Please find the following code for exercise 1 online at:
 
-\url{https://github.com/bschwb/cmsde/hw2/exercise1.py}
+\url{https://github.com/bschwb/cmsde/blob/master/hw2/exercise1.py}
 
 \lstinputlisting{exercise1.py}
 
