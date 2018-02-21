@@ -10,6 +10,7 @@
 \usepackage{listings}
 \usepackage{hyperref}
 \usepackage{graphicx}
+\usepackage{enumitem}
 
 \usepackage{amsmath}
 \usepackage{amssymb}
@@ -30,7 +31,7 @@
 
 \begin{document}
 
-\begin{enumerate}
+\begin{enumerate}[leftmargin=0em]
 \item
 For the following SDE
 \begin{IEEEeqnarray*}{rCl}
@@ -51,23 +52,23 @@ Brownian motion satisfying the SDE:
     \dX(t) & = & \mu X(t) \dt + \sigma X(t) dW
 \end{IEEEeqnarray*}
 with $\mu$ and $\sigma$ constant.
+For the plots I used $\mu = \sigma = 1$.
 
 The weak error is defined as
 \[ \EV{g(X(T))} - \EV{g(\Xb(T))}\]
 I evaluated the weak error for the following functions:
 \[g_1(x) = e^{-x^2/2}, \quad g_2(x) = x, \quad g_3(x) = \frac{1}{\sqrt{|x - 5 \sigma|}}\]
 
-I simulated with $10^5$ samples per Monte Carlo approximation.
-For the plots I used $\mu = \sigma = 1$.
+For each Monte Carlo approximation I used $10^5$ samples.
 
 We see in~\figref{fig:strong}, that the strong error declines with $O(\sqrt{\D t})$ as predicted by Theorem 3.1.
-
 For the sufficiently fast declining function $g_1$ we get linear convergence as
 stated in Theorem 5.8.
-
 We also get linear weak error convergence for $g_2$ although
-$\lim_{x\rightarrow\infty}g_2(x) \neq 0$.
-Finally we are able to get non linear convergence for $g_3$.
+$\lim_{|x|\rightarrow\infty}g_2(x) \neq 0$, which is required by Theorem 5.8.
+Finally we are able to get non linear convergence for $g_3$, which is not in
+$L^2$ with a singularity at a place where $X$ is likely to take some values.
+
 \begin{figure}[h]
   \centering
 \includegraphics[width=0.5\textwidth]{strong_error.pdf}
@@ -87,7 +88,6 @@ Finally we are able to get non linear convergence for $g_3$.
     \caption{Weak error for $g_2$ with fitted linear function}
     \label{fig:weak2}
   \end{figure}
-\end{figure}
 \begin{figure}[h]
   \centering
   \includegraphics[width=0.5\textwidth]{weak_error3.pdf}
@@ -96,8 +96,9 @@ Finally we are able to get non linear convergence for $g_3$.
 \end{figure}
 
 \item
-\begin{enumerate}
-\item
+
+\begin{enumerate}[leftmargin=1em]
+  \item
   We use the diagonalization of $A = T^{-1} \Lambda T$, where $T$ is an
   invertible matrix and $\Lambda~=~\text{diag}(\lambda_1, \lambda_2)$ is the
   diagonal matrix of eigenvalues. Further we will only consider the transformed

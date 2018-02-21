@@ -15,7 +15,7 @@ endtime = 1
 # Functions for weak convergence
 g1 = lambda x: np.exp(-x**2)
 g2 = lambda x: x
-g3 = lambda x: 1/np.sqrt(abs(x-5))
+g3 = lambda x: 1/np.sqrt(abs(x-sigma*5))
 
 # Numerics
 def forward_euler(x0, endtime, timesteps, samples):
