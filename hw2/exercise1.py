@@ -40,7 +40,7 @@ sol = np.vectorize(sol)
 
 
 # Simulation parameters
-samples = 1000
+samples = 10000
 
 # Monte Carlo error approximations
 n_partitions = np.logspace(1, 4, num=20, dtype=int)
@@ -71,7 +71,7 @@ plt.cla()
 k, d = np.polyfit(dts, err_weak1, 1)
 plt.semilogx(dts, err_weak1, dts, k * dts + d)
 plt.gca().invert_xaxis()
-plt.ylabel('weak error')
+plt.ylabel('weak error g1')
 plt.xlabel('$\Delta t$')
 plt.savefig('weak_error1.pdf', bbox_inches='tight')
 plt.clf()
@@ -79,7 +79,7 @@ plt.clf()
 k, d = np.polyfit(dts, err_weak2, 1)
 plt.semilogx(dts, err_weak2, dts, k * dts + d)
 plt.gca().invert_xaxis()
-plt.ylabel('weak error')
+plt.ylabel('weak error g2')
 plt.xlabel('$\Delta t$')
 plt.savefig('weak_error2.pdf', bbox_inches='tight')
 plt.clf()
@@ -87,7 +87,7 @@ plt.clf()
 k, d = np.polyfit(dts, err_weak3, 1)
 plt.semilogx(dts, err_weak3, dts, k * dts + d)
 plt.gca().invert_xaxis()
-plt.ylabel('weak error')
+plt.ylabel('weak error g2')
 plt.xlabel('$\Delta t$')
 plt.savefig('weak_error3.pdf', bbox_inches='tight')
 plt.clf()

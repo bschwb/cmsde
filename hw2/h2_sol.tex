@@ -7,13 +7,15 @@
 \chead{CMSDE HW2}
 \ohead{\today}
 
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{commath}
 \usepackage[makeroom]{cancel}
 \usepackage[retainorgcmds]{IEEEtrantools}
-
-\usepackage{amsthm}
 
 \newcommand*{\dt}{\dif{}t}
 \newcommand*{\dY}{\dif{}Y}
@@ -30,12 +32,60 @@
 
 \begin{enumerate}
 \item
+For the following SDE
 \begin{IEEEeqnarray*}{rCl}
     \dX(t) & = & a(t, X(t)) \dt + b(t, X(t)) dW \\
     X(0) & = & x_0
 \end{IEEEeqnarray*}
-$\Xb_0 = x_0$
-\[\Xb_{n+1} = \Xb_n + a(t_n, \Xb_n) \D t + b(t_n, \Xb_n) \D W_n\]
+I implemented the forward Euler approximation
+\begin{IEEEeqnarray*}{rCl}
+\Xb_{n+1} &=& \Xb_n + a(t_n, \Xb_n) \D t + b(t_n, \Xb_n) \D W_n \\
+\Xb_0 &=& x_0
+\end{IEEEeqnarray*}
+
+To make computing the strong error
+\[ \norm{X(T) - \Xb(T)}_{L^2(\Omega)} = \sqrt{\EV{(X(T) - \Xb(T))^2}} \]
+easier, I use a SDE with a known analytical solution, namely the geometric
+Brownian motion satisfying the SDE:
+\begin{IEEEeqnarray*}{rCl}
+    \dX(t) & = & \mu X(t) \dt + \sigma X(t) dW
+\end{IEEEeqnarray*}
+with $\mu$ and $\sigma$ constant.
+
+The weak error is defined as
+\[ \EV{g(X(T))} - \EV{g(\Xb(T))}\]
+I evaluated the weak error for the following functions:
+\[g_1(x) = e^{-x^2/2}, \quad g_2(x) = x, \quad g_3(x) = \frac{1}{\sqrt{|x - 5 \sigma|}}\]
+
+I simulated with $10^5$ samples per Monte Carlo approximation.
+For the plots I used $\mu = \sigma = 1$.
+
+The first graph shows the strong error together with a fitted square root function:
+\begin{figure}[h]
+  \centering
+\includegraphics[width=0.5\textwidth]{strong_error.pdf}
+\caption{Strong error square root convergence}
+\label{fig:strong}
+\end{figure}
+We see in~\figref{fig:strong}, that the error declines with $O(\sqrt{\D t})$ as predicted by Theorem 3.1.
+
+  \begin{figure}
+  \centering
+    \includegraphics[width=0.5\textwidth]{weak_error1.pdf}
+    \caption{Weak error for $g_1$ with linear convergence}
+  \end{figure}
+  \begin{figure}
+  \centering
+    \includegraphics[width=0.4\textwidth]{weak_error2.pdf}
+    \caption{Linear weak error convergence although $\lim_{x\rightarrow\infty}g_2(x) \neq 0$}
+  \end{figure}
+\end{figure}
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.5\textwidth]{weak_error3.pdf}
+  \caption{No convergence because $g_3 \notin L^2$}
+\end{figure}
+\pagebreak
 
 \item
 \begin{enumerate}
@@ -75,10 +125,10 @@ $\Xb_0 = x_0$
   \[\dX = a X_t \dt + b X_t \dW_t\]
   we formulate following method: apply backwards Euler for the drift part and
   forward Euler for the diffusion term.
-  The heuristic is to to get similar behaviour as in 2a) for the drift part and
+  The heuristic is to to get similar behavior as in 2a) for the drift part and
   still obtain an It\^{o} integral for the diffusion term:
   \[X(t_{n+1}) - X(t_n) = a X(t_{n+1}) \D t + b X(t_n) \D W \]
-  With this idea the update is explicitely given by:
+  With this idea the update is explicitly given by:
   \[X(t_{n+1}) = \frac{1 + b \D W}{1 - a \D t} X(t_n)\]
 
   We will compare it to the complete forward Euler discretization, for which we
@@ -96,12 +146,18 @@ $\Xb_0 = x_0$
      \Lt{\Xb(t_n) - X(t_n)}
   \]
 
-Now the the fraction is bounded for some small $c \geq \D t \geq 0$, where c is
+Now the fraction is bounded for some small $c \geq \D t \geq 0$, where c is
 dependent on $a < 0$ and $b > 0$.
 
 By assuming \[ \Lt{\Xb(t_0) - X(t_0)} \leq K \D t \]
 we get $L^2$-equivalence of the methods in the limit $\D t \rightarrow 0$.
 \end{enumerate}
 \end{enumerate}
+
+Please find the following code for exercise 1 online at:
+
+\url{https://github.com/bschwb/cmsde/hw2/exercise1.py}
+
+\lstinputlisting{exercise1.py}
 
 \end{document}
