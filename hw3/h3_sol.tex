@@ -12,6 +12,7 @@
 \usepackage{commath}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
+\usepackage[noabbrev]{cleveref}
 \usepackage{graphicx}
 
 \newcommand*{\E}{\mathbb{E}}
@@ -52,13 +53,30 @@
     With the central limit theorem the error $\epsilon_N$ tends in distribution
     to:
     \[ \sqrt{N} \epsilon_N \rightharpoonup \mathcal{N}\left( 0, e^{-2rT} \hat{\sigma}^2 \right)\]
-    \begin{figure}[h]
+
+  \item
+    Compute the sensitivity
+    \[ \Delta \equiv \frac{\partial{}f(0,s)}{\partial{}s} \approx
+      \frac{f(0,s+\Delta{}s) - f(0,s)}{\Delta{}s}\]
+
+    Plotted in \cref{fig:delta}.
+    Better methods maybe adaptive?
+
+\begin{figure}[h]
+    \begin{minipage}[b]{.5\linewidth}
       \centering
-      \includegraphics[width=.5\textwidth]{error_var.png}
+      \includegraphics[width=\linewidth]{error_var.png}
       \caption{Error variance}
       \label{fig:error_var}
-    \end{figure}
-  \item
+    \end{minipage}%
+    \begin{minipage}[b]{.5\linewidth}
+      \centering
+      \includegraphics[width=\linewidth]{delta_f.png}
+      \caption{Delta}
+      \label{fig:delta}
+    \end{minipage}
+\end{figure}
+
 \end{enumerate}
 
 \item
