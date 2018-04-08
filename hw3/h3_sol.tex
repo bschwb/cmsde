@@ -91,7 +91,52 @@
 \item
 \begin{enumerate}[leftmargin=1em]
   \item
+    Find the solution for the SDE
+    \[\dif{}Y(t) = \left( -\alpha (2+Y(t)) + 0.4 \sqrt{\alpha} \sqrt{1-\rho^2}
+      \right) \dt + 0.4 \sqrt{\alpha} \dif{}\hat{Z}(t)\]
+    with
     \[\hat{Z}(t) = \rho W(t) + \sqrt{1-\rho^2} Z(t)\]
+    I use separation of variables to solve this $Y(t) = U(t)V(t)$.
+    $U(t)$ solves
+    \[ \dif{}U(t) = -\alpha U(t) \dt, U(0)=1\]
+    and thus $U(t) = e^{-\alpha t}$.
+    $V(t)$ solves
+    \[ \dif{}V(t) = \gamma(t)\dt + \theta(t)\dif{}\hat{Z}(t), V(0) = Y(0)\]
+    The coefficients $\gamma(t)$ and $\theta(t)$ can be found be comparing
+    coefficients in the original equation with the coefficients from applying
+    the product rule
+    \begin{IEEEeqnarray*}{rCl}
+    \dif{}Y(t) &=& \dif{}(U(t)V(t)) = V(t)\dif{}U(t) + U(t)\dif{}V(t) +
+    \dif\left<U,V\right>_t \\
+    &=& -\alpha Y(t) \dt + U(t) \gamma(t)\dt + U(t) \theta(t)\dif{}\hat{Z}(t)
+    \end{IEEEeqnarray*}
+    Thus
+    \[ \gamma(t) = \frac{-2\alpha+0.4\sqrt{\alpha}\sqrt{1-\rho^2}}{U(t)}, \quad
+    \theta(t) = \frac{0.4\sqrt{\alpha}}{U(t)}\]
+  and
+    \begin{IEEEeqnarray*}{rCl}
+  Y(t) &=& U(t)V(t) = e^{-\alpha t} \left( Y_0 + \int_0^t e^{\alpha s}\left(-2\alpha
+      + 0.4\sqrt{\alpha}\sqrt{1-\rho^2}\right)\ds + \int_0^t e^{\alpha s} 0.4
+      \sqrt{\alpha} \dW(s)\right) \\
+  &=& e^{-\alpha t} \left( Y_0 + \left(e^{\alpha t}-1\right)\left(-2
+      + \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2}\right) + \int_0^t e^{\alpha s} 0.4 \sqrt{\alpha} \dW(s)\right)
+    \end{IEEEeqnarray*}
+    For the expected value of $Y(t)$ I obtain:
+    \[ \EV{Y(t)} = e^{-\alpha t}\left(  \EV{Y_0} + \left( e^{\alpha t} -1 \right)
+      \left( -2 + \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2}\right)\right)
+      \underset{t\rightarrow\infty}{\longrightarrow} -2 + \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2}\]
+    For the variance, with $\left( e^{\alpha t} - 1 \right)\left( -2 +
+      \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2} \right) = b$:
+
+    \begin{IEEEeqnarray*}{rCl}
+      \Var{Y(t)} &=& \EV{Y(t)^2} - \EV{Y(t)}^2 \\
+      &=& e^{-2\alpha t} \left(\EV{Y_0^2} + b^2 + \int_0^t e^{2\alpha s} 0.16
+        \alpha \dt + 2 \EV{Y_0} b\right)
+      - e^{-2\alpha t} \left( \EV{Y_0}^2 + b^2 + 2 \EV{Y_0} b \right) \\
+      &=& e^{-2\alpha t} \left( \Var{Y_0} + 0.08 \left( e^{2\alpha t} -
+          1\right)\right) \\
+      &\underset{t\rightarrow\infty}{\longrightarrow}& 0.08
+    \end{IEEEeqnarray*}
 
   \item
     \[\dX = -\alpha X(t)\dt + \sqrt{\alpha} \dW(t)  \]
@@ -134,7 +179,7 @@
         (1-\alpha\Dt)^{2j} \\
       &=& \Var{X_0} (1-\alpha\Dt)^{2(i+1)} + \alpha\Dt\frac{1 -
         (1-\alpha\Dt)^{2i}}{1-(1-\alpha\Dt)^2} \\
-    &\underset{i\rightarrow\infty}{\longrightarrow}& 
+    &\underset{i\rightarrow\infty}{\longrightarrow}&
     \frac{\alpha\Dt}{2\alpha\Dt-(\alpha\Dt)^2} = \frac{1}{2 - \alpha\Dt}\\
     \end{IEEEeqnarray*}
 
