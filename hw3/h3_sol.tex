@@ -19,6 +19,15 @@
 \newcommand*{\EV}[1]{\E\left[{#1}\right]}
 \newcommand*{\Var}[1]{\text{Var}\left({#1}\right)}
 
+\newcommand*{\dt}{\dif{}t}
+\newcommand*{\Dt}{\Delta{}t}
+\newcommand*{\ds}{\dif{}s}
+\newcommand*{\dW}{\dif{}W}
+\newcommand*{\DW}{\Delta{}W}
+\newcommand*{\dX}{\dif{}X(t)}
+
+\newcommand*{\Xb}{\bar{X}}
+
 \usepackage{enumitem}
 
 \begin{document}
@@ -82,7 +91,92 @@
 \item
 \begin{enumerate}[leftmargin=1em]
   \item
+    \[\hat{Z}(t) = \rho W(t) + \sqrt{1-\rho^2} Z(t)\]
+
   \item
+    \[\dX = -\alpha X(t)\dt + \sqrt{\alpha} \dW(t)  \]
+  \begin{enumerate}[leftmargin=1em]
+    \item
+    By separation of variables $X(t) = U(t)V(t)$ I obtain the solution:
+    \[ X(t) = e^{-\alpha t} \left( X_0 + \int_0^t e^{\alpha s} \sqrt{\alpha} \dW(s) \right)\]
+    Thus the expected value for $X(t)$ is
+    \[ \EV{X(t)} = e^{-\alpha t} \EV{X_0} \underset{t\rightarrow\infty}{\longrightarrow} 0\]
+    and variance (assuming $X_0$ is independent of $W(t)$)
+    \begin{IEEEeqnarray*}{rCl}
+      \Var{X(t)} &=& \EV{X(t)^2} - \EV{X(t)}^2 \\
+      &=& e^{-2\alpha t}\left(\EV{X_0^2}
+      + \EV{2 X_0 \int_0^t e^{\alpha s} \sqrt{\alpha} \dW(s)}
+      + \EV{\left(\int_0^t e^{\alpha s} \sqrt{\alpha} \dW(s) \right)^2}\right) \\
+      &&- e^{-2\alpha t} \EV{X_0}^2 \\
+      &=& e^{-2\alpha t} \left(\EV{X_0^2} + \EV{\int_0^t e^{2\alpha s} \alpha
+          \dt} - \EV{X_0}^2\right) \\
+      &=& e^{-2\alpha t} \left(\Var{X_0} + \frac{e^{2\alpha t} - 1}{2}  \right)
+      = e^{-2\alpha t} \Var{X_0} + \frac{1 - e^{-2\alpha t}}{2}
+      \underset{t\rightarrow\infty}{\longrightarrow} \frac{1}{2}
+    \end{IEEEeqnarray*}
+
+    \item Forward Euler approximation
+      \[\Xb_n = X_0 + \sum_{i=0}^{n-1} -\alpha \Xb_i (t_{i+1} - t_i) +
+        \sqrt{\alpha} (W_{i+1} - W_{i})  \]
+      \[\Xb_0 = X_0\]
+      \[\Xb_i = \Xb_{i-1} - \alpha \Xb_{i-1} (t_i - t_{i-1}) + \sqrt{\alpha}
+        (W_i - W_{i-1}) = \Xb_{i-1}(1-\alpha\Dt) + \sqrt{\alpha} \DW_i \]
+      \[\EV{\Xb_i} = \EV{\Xb_{i-1}} (1 - \alpha \Dt) = \EV{X_0} (1-\alpha\Dt)^i
+      \underset{i\rightarrow\infty}\longrightarrow 0 \]
+    \begin{IEEEeqnarray*}{rCl}
+      \Var{\Xb_i} &=& \EV{\Xb_i^2} - \EV{\Xb_i}^2 \\
+      &=& \EV{\Xb^2_{i-1}(1-\alpha\Dt)^2 + 2 \Xb_{i-1}(1-\alpha\Dt) \sqrt{\alpha}
+        \DW_i + \alpha \DW_i^2} - \EV{\Xb_{i-1}}^2(1-\alpha\Dt)^2 \\
+      &=& \EV{\Xb^2_{i-1}} (1-\alpha\Dt)^2 + \alpha \Dt -
+      \EV{\Xb_{i-1}}^2(1-\alpha\Dt)^2 \\
+      &=& \Var{\Xb_{i-1}} (1-\alpha\Dt)^2+ \alpha \Dt \\
+      &=& \Var{X_0} (1-\alpha\Dt)^{2(i+1)} + \alpha\Dt\sum_{j=0}^{i-1}
+        (1-\alpha\Dt)^{2j} \\
+      &=& \Var{X_0} (1-\alpha\Dt)^{2(i+1)} + \alpha\Dt\frac{1 -
+        (1-\alpha\Dt)^{2i}}{1-(1-\alpha\Dt)^2} \\
+    &\underset{i\rightarrow\infty}{\longrightarrow}& 
+    \frac{\alpha\Dt}{2\alpha\Dt-(\alpha\Dt)^2} = \frac{1}{2 - \alpha\Dt}\\
+    \end{IEEEeqnarray*}
+
+    \item Backward Euler approximation
+      \[\Xb_n = X_0 + \sum_{i=0}^{n-1} -\alpha \Xb_{i+1} (t_{i+1} - t_i)
+        + \sqrt{\alpha} (W_{i+1} - W_{i}) \]
+      \begin{IEEEeqnarray*}{rCl}
+        \Xb_i &=& \Xb_{i-1} - \alpha \Xb_i (t_i - t_{i-1}) + \sqrt{\alpha}
+        (W_i - W_{i-1}) \\
+        &=& \frac{\Xb_{i-1} + \sqrt{\alpha} \DW_i}{1+\alpha\Dt}
+      \end{IEEEeqnarray*}
+
+    Expected value:
+    \[\EV{\Xb_i} = \frac{\EV{\Xb_{i-1}}}{1+\alpha\Dt} = \EV{X_0}
+      (1+\alpha\Dt)^{-i} \underset{i \rightarrow\infty}{\longrightarrow} 0
+    \]
+
+    Variance:
+    \begin{IEEEeqnarray*}{rCl}
+      \Var{\Xb_i} &=& \EV{\Xb_i^2} - \EV{\Xb_i}^2 \\
+      &=& \EV{\frac{\Xb_{i-1}^2 + 2 X_{i-1} \sqrt{\alpha}\Dt\DW_i +
+          \alpha(\DW_i)^2}{(1+\alpha\Dt)^2}} - \frac{\EV{\Xb_{i-1}}^2}{(1+\alpha\Dt)^2} \\
+      &=& \frac{\EV{\Xb_{i-1}^2} + \alpha\Dt - \EV{\Xb_{i-1}}^2}{(1+\alpha\Dt)^2}
+      = \frac{\Var{\Xb_{i-1}} + \alpha\Dt}{(1+\alpha\Dt)^2} \\
+      &=& \frac{\Var{X_0}}{(1+\alpha\Dt)^{2i}} + \alpha\Dt \sum_{j=1}^{i-1}
+      (1+\alpha\Dt)^{-2j} \\
+      &=& \frac{\Var{X_0}}{(1+\alpha\Dt)^{2i}} - \alpha\Dt
+      + \alpha\Dt\frac{1 - (1+\alpha\Dt)^{-2(i-1)}}{1-(1+\alpha\Dt)^{-2}} \\
+      &\underset{i\rightarrow\infty}\longrightarrow& -\alpha\Dt +
+      \frac{\alpha\Dt}{1-\frac{1}{(1+\alpha\Dt)^2}} =
+      -\alpha\Dt + \frac{\alpha\Dt (1+\alpha\Dt)^2}{(1+\alpha\Dt)^2-1} \\
+      &=& -\alpha\Dt + \frac{\alpha\Dt (1+ 2\alpha\Dt +
+        (\alpha\Dt)^2)}{2\alpha\Dt + (\alpha\Dt)^2}
+      = \frac{-2\alpha\Dt - (\alpha\Dt)^2 + 1 + 2\alpha\Dt +
+        (\alpha\Dt)^2}{2+\alpha\Dt} \\
+      &=& \frac{1}{2+\alpha\Dt}
+    \end{IEEEeqnarray*}
+
+    \item Interpration:
+      Seems like variance is better for forward Euler.
+  \end{enumerate}
+
   \item
   \item
 \end{enumerate}
