@@ -17,6 +17,11 @@
 \usepackage[noabbrev]{cleveref}
 \usepackage{graphicx}
 \usepackage{listings}
+\lstset{language=Python,
+  frame=single,
+  breaklines=true,
+  captionpos=b
+}
 
 \newcommand*{\E}{\mathbb{E}}
 \newcommand*{\EV}[1]{\E\left[{#1}\right]}
@@ -56,23 +61,33 @@
       \mathcal{N}\left(0, \frac{\sigma_g^2}{N}\right) \]
 
     \[ \sigma_g^2 = \EV{g^2} - \EV{g}^2 = \EV{\left( g - \EV{g} \right)^2}\]
-    sample variance:
+    Since the variance is not known, I fall back to the sample variance:
     \[ \hat{\sigma_g}^2 = \frac{1}{N - 1} \sum_{i=1}^N \left( \bar{g_i}  -
         \frac{\sum^N_{j=1}  \bar{g}_j}{N} \right)^2 \]
 
-    So for $f$ the variance of its approximation $\bar{f}$ can be computed as
+    For $f$ the variance of its approximation $\bar{f}$ can be computed as
     \[ \Var{\bar{f}} = e^{-2rT} \Var{\bar{g}}\]
     With the central limit theorem the error $\epsilon_N$ tends in distribution
     to:
     \[ \sqrt{N} \epsilon_N \rightharpoonup \mathcal{N}\left( 0, e^{-2rT} \hat{\sigma_g}^2 \right)\]
 
+    In \cref{fig:error_var} the variance of the error is plotted against the
+    Monte Carlo sample size. A 
+
+    The price computed with the biggest sample size of $N = \num{e7}$ is
+    \[ f(0, S_0) = \num{2.32} \]
+
+    The code can be found in the code appendix in listing~\ref{lstex1a}.
+
   \item
-    Compute the sensitivity
+    The sensitivity computed via the following method
     \[ \Delta \equiv \frac{\partial{}f(0,s)}{\partial{}s} \approx
       \frac{f(0,s+\Delta{}s) - f(0,s)}{\Delta{}s}\]
+    is plotted in \cref{fig:delta}.
+    The code can be found again in the code appendix in listing~\ref{lstex1b}.
 
-    Plotted in \cref{fig:delta}.
-    Better methods maybe adaptive?
+    A better method may be to use the Black-Scholes equation and analyze the
+    dependency of the solution on the start value in that PDE.
 
 \begin{figure}[h]
     \begin{minipage}[b]{.5\linewidth}
@@ -84,7 +99,7 @@
     \begin{minipage}[b]{.5\linewidth}
       \centering
       \includegraphics[width=\linewidth]{delta_f.png}
-      \caption{Delta}
+      \caption{Sensitivity}
       \label{fig:delta}
     \end{minipage}
 \end{figure}
@@ -124,13 +139,14 @@
   &=& e^{-\alpha t} \left( Y_0 + \left(e^{\alpha t}-1\right)\left(-2
       + \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2}\right) + \int_0^t e^{\alpha s} 0.4 \sqrt{\alpha} \dW(s)\right)
     \end{IEEEeqnarray*}
-    For the expected value of $Y(t)$ I obtain:
+    Using the fact, that the expected value of the It\^{o} integral is 0, I obtain
+    the following for the expected value of $Y(t)$:
     \[ \EV{Y(t)} = e^{-\alpha t}\left(  \EV{Y_0} + \left( e^{\alpha t} -1 \right)
       \left( -2 + \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2}\right)\right)
       \underset{t\rightarrow\infty}{\longrightarrow} -2 + \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2}\]
-    For the variance, with $\left( e^{\alpha t} - 1 \right)\left( -2 +
-      \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2} \right) = b$:
-
+    As a shorthand I use $b=\left( e^{\alpha t} - 1 \right)\left( -2 +
+      \frac{0.4}{\sqrt{\alpha}}\sqrt{1-\rho^2} \right)$ going forward.
+    To compute the variance I use the It\^{o} isometry:
     \begin{IEEEeqnarray*}{rCl}
       \Var{Y(t)} &=& \EV{Y(t)^2} - \EV{Y(t)}^2 \\
       &=& e^{-2\alpha t} \left(\EV{Y_0^2} + b^2 + \int_0^t e^{2\alpha s} 0.16
@@ -140,6 +156,7 @@
           1\right)\right) \\
       &\underset{t\rightarrow\infty}{\longrightarrow}& 0.08
     \end{IEEEeqnarray*}
+    So we see, that the variance is independent of all parameters.
 
   \item
     \[\dX = -\alpha X(t)\dt + \sqrt{\alpha} \dW(t)  \]
@@ -163,14 +180,17 @@
       \underset{t\rightarrow\infty}{\longrightarrow} \frac{1}{2}
     \end{IEEEeqnarray*}
 
-    \item Forward Euler approximation
+    \item The Forward Euler approximation for this equation is
       \[\Xb_n = X_0 + \sum_{i=0}^{n-1} -\alpha \Xb_i (t_{i+1} - t_i) +
         \sqrt{\alpha} (W_{i+1} - W_{i})  \]
-      \[\Xb_0 = X_0\]
+      Or in iterative form
       \[\Xb_i = \Xb_{i-1} - \alpha \Xb_{i-1} (t_i - t_{i-1}) + \sqrt{\alpha}
         (W_i - W_{i-1}) = \Xb_{i-1}(1-\alpha\Dt) + \sqrt{\alpha} \DW_i \]
+      Using this second form, it is easy to compute the expected value
       \[\EV{\Xb_i} = \EV{\Xb_{i-1}} (1 - \alpha \Dt) = \EV{X_0} (1-\alpha\Dt)^i
       \underset{i\rightarrow\infty}\longrightarrow 0 \]
+    To compute the variance we use $\EV{\DW_i}=0$ and $\EV{\DW_i^2}=\Dt$ and the
+    geometric series
     \begin{IEEEeqnarray*}{rCl}
       \Var{\Xb_i} &=& \EV{\Xb_i^2} - \EV{\Xb_i}^2 \\
       &=& \EV{\Xb^2_{i-1}(1-\alpha\Dt)^2 + 2 \Xb_{i-1}(1-\alpha\Dt) \sqrt{\alpha}
@@ -186,9 +206,10 @@
     \frac{\alpha\Dt}{2\alpha\Dt-(\alpha\Dt)^2} = \frac{1}{2 - \alpha\Dt}\\
     \end{IEEEeqnarray*}
 
-    \item Backward Euler approximation
+    \item The Backward Euler approximation is
       \[\Xb_n = X_0 + \sum_{i=0}^{n-1} -\alpha \Xb_{i+1} (t_{i+1} - t_i)
         + \sqrt{\alpha} (W_{i+1} - W_{i}) \]
+      and in iterative form
       \begin{IEEEeqnarray*}{rCl}
         \Xb_i &=& \Xb_{i-1} - \alpha \Xb_i (t_i - t_{i-1}) + \sqrt{\alpha}
         (W_i - W_{i-1}) \\
@@ -221,8 +242,11 @@
       &=& \frac{1}{2+\alpha\Dt}
     \end{IEEEeqnarray*}
 
-    \item Interpretation:
-      Seems like variance is better for forward Euler.
+    \item Both approximations lead to the same expected value, but differ in the
+      variance.
+      In the limit $\Dt \rightarrow 0$ the variance of both approximations
+      converge to the variance of the explicit solution.
+      The forward Euler approximation seems a bit better, due to the smaller variance.
   \end{enumerate}
 
   \item
@@ -258,31 +282,36 @@
   where $\Phi$ is the CDF of the normal distribution.
   So for the confidence interval to be \num{0.05} wide, the following sample
   size is needed
-  \[ n = \left(2\frac{1.96 \hat{\sigma}}{0.05}\right)^2 \approx \SI{543}{\kilo} \]
+  \[ n = \left(2\frac{1.96 \hat{\sigma}}{0.05}\right)^2 \approx 543\text{k} \]
 
   Since $2 \times n \times timesteps$ normally distributed random variables are
   needed, for \num{e4} timesteps this corresponds to approximately 10 billion
   random variables.
-  It took about 10 minutes on my laptop for \SI{500}{\kilo} samples and \num{e4}
+  It took about 10 minutes on my laptop for 500$k$ samples and \num{e4}
   time steps.
 
   To arrive an accuracy of $TOL=\num{5e-3}$, which corresponds to an increase of
   accuracy by a factor of 10, a factor of 100 times more samples would be needed.
-  Assuming the machine has enough memory and the computational time scales
-  lineary with the number of sampled random variables, roughly \SI{17}{\hour}
-  would be needed for this accuracy.
+  Assuming that the machine has enough memory and that the computational time scales
+  linearity with the number of sampled random variables, roughly \SI{17}{\hour}
+  would be needed to obtain this accuracy.
     
 \end{enumerate}
 
 \end{enumerate}
 
-% \section{Code Appendix}
+\section*{Code Appendix}
 
-% All code can be found online at
-% \url{https://github.com/bschwb/cmsde/tree/master/hw3}
+All code can be found online at
+\url{https://github.com/bschwb/cmsde/tree/master/hw3}
 
-% \begin{listings}
-%   \lstinputlisting{exercise2.py}
-% \end{listings}
+\lstset{caption={Code for 1a)}, label=lstex1a}
+\lstinputlisting{exercise1a.py}
+
+\lstset{caption={Code for 1b)}, label=lstex1b}
+\lstinputlisting{exercise1b.py}
+
+\lstset{caption={Code for 2)}, label=lstex2}
+\lstinputlisting{exercise2.py}
 
 \end{document}

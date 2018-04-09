@@ -3,7 +3,6 @@ from math import sqrt, exp
 import numpy as np
 import matplotlib.pyplot as plt
 
-
 T = 1/2
 S_0 = 35
 K = 35
@@ -25,7 +24,9 @@ for i, n_samples in enumerate(samples_sequence):
     sample_variance_f[i] = exp(-2*r*T) * 1/(n_samples - 1) * sum((g - ev_g)**2)
     error_variance[i] = sample_variance_f[i] / n_samples
 
-# plt.semilogx(samples_sequence, f)
+print('f =', f[-1])
 plt.loglog(samples_sequence, error_variance)
+plt.ylabel('error variance')
+plt.xlabel('MC sample size')
 plt.savefig('error_var.png')
 plt.show()

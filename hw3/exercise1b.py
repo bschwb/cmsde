@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 
 
 T = 1/2
-# S_0 = 35
 K = 35
 
 r = 0.04
@@ -28,5 +27,7 @@ for i, S_0 in enumerate(start_vals):
     f[i] = exp(-r * T) * ev_g
 
 plt.plot(start_vals, f)
+plt.xlabel('start value $S_0$')
+plt.ylabel('sensitivity $\Delta f$')
 plt.savefig('delta_f.png')
 plt.show()
