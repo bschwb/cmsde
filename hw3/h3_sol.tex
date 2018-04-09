@@ -48,23 +48,23 @@
 
 \begin{enumerate}[leftmargin=1em]
   \item
-    The price of a European call option is
+    The price of an European call option is
     \[ f(0, S_0) = e^{-rT} \EV{\max{(S(T) - K, 0)\left|S(0) = S_0 \right.}} = e^{-rT} \EV{g(0, S_0)}\]
     I apply a Monte Carlo method to compute an approximation $\bar{g}(0, S_0) \approx g(0, S_0)$.
     To obtain the accuracy for this approximation, I use the central limit theorem
     \[ \frac{\sum^N_i \bar{g}_i}{N} - \mu \rightharpoonup
-      \mathcal{N}\left(0, \frac{\sigma^2}{N}\right) \]
+      \mathcal{N}\left(0, \frac{\sigma_g^2}{N}\right) \]
 
-    \[ \sigma^2 = \EV{g^2} - \EV{g}^2 = \EV{\left( g - \EV{g} \right)^2}\]
+    \[ \sigma_g^2 = \EV{g^2} - \EV{g}^2 = \EV{\left( g - \EV{g} \right)^2}\]
     sample variance:
-    \[ \hat{\sigma}^2 = \frac{1}{N - 1} \sum_{i=1}^N \left( \bar{g_i}  -
+    \[ \hat{\sigma_g}^2 = \frac{1}{N - 1} \sum_{i=1}^N \left( \bar{g_i}  -
         \frac{\sum^N_{j=1}  \bar{g}_j}{N} \right)^2 \]
 
     So for $f$ the variance of its approximation $\bar{f}$ can be computed as
     \[ \Var{\bar{f}} = e^{-2rT} \Var{\bar{g}}\]
     With the central limit theorem the error $\epsilon_N$ tends in distribution
     to:
-    \[ \sqrt{N} \epsilon_N \rightharpoonup \mathcal{N}\left( 0, e^{-2rT} \hat{\sigma}^2 \right)\]
+    \[ \sqrt{N} \epsilon_N \rightharpoonup \mathcal{N}\left( 0, e^{-2rT} \hat{\sigma_g}^2 \right)\]
 
   \item
     Compute the sensitivity
@@ -134,8 +134,8 @@
     \begin{IEEEeqnarray*}{rCl}
       \Var{Y(t)} &=& \EV{Y(t)^2} - \EV{Y(t)}^2 \\
       &=& e^{-2\alpha t} \left(\EV{Y_0^2} + b^2 + \int_0^t e^{2\alpha s} 0.16
-        \alpha \dt + 2 \EV{Y_0} b\right)
-      - e^{-2\alpha t} \left( \EV{Y_0}^2 + b^2 + 2 \EV{Y_0} b \right) \\
+        \alpha \dt + 2 \EV{Y_0} b\right) \\
+      &&- e^{-2\alpha t} \left( \EV{Y_0}^2 + b^2 + 2 \EV{Y_0} b \right) \\
       &=& e^{-2\alpha t} \left( \Var{Y_0} + 0.08 \left( e^{2\alpha t} -
           1\right)\right) \\
       &\underset{t\rightarrow\infty}{\longrightarrow}& 0.08
@@ -237,12 +237,41 @@
     The parameters used where $\alpha=100, r=0.04, T=\frac{3}{4}, Y_0 = -1,
     S_0=K=100$ and $\rho=-0.3$.
 
-    With \num{e4} Monte Carlo samples and \num{e3} equidistant time steps I
+    With \num{e4} Monte Carlo samples and \num{e4} equidistant time steps I
     get for the option value
-    \[ e^{-rT} \EV{\max{(S(T) - K, 0)}} = \num{6.92}\]
-    % The code can be found in \cref{lst:ex2}.
+    \[ f(0, S_0) = e^{-rT} \EV{\max{(S(T) - K, 0)}} = \num{7.02}\]
 
   \item
+    Analogous to exercise 1, we conclude that the statistical error is normally
+    distributed in the weak limit.
+    The sample variance is also computed with the same parameters
+    as in 2c):
+    \[ \hat{\sigma} = \sqrt{\frac{1}{N - 1} \sum_{i=1}^N \left( \bar{f_i}  -
+        \frac{\sum^N_{j=1}  \bar{f}_j}{N} \right)^2} = \num{9.4} \]
+
+    I construct a 95\% confidence interval around $\EV{S(T)} = \mu$:
+    \[ \left[\mu + \frac{\Phi^{-1}(0.025)\hat{\sigma}}{\sqrt{n}},
+        \mu - \frac{\Phi^{-1}(0.025)\hat{\sigma}}{\sqrt{n}}\right]
+      = \left[\mu + 1.96 \frac{\hat{\sigma}}{\sqrt{n}},
+         \mu - 1.96 \frac{\hat{\sigma}}{\sqrt{n}} \right]
+    \]
+  where $\Phi$ is the CDF of the normal distribution.
+  So for the confidence interval to be \num{0.05} wide, the following sample
+  size is needed
+  \[ n = \left(2\frac{1.96 \hat{\sigma}}{0.05}\right)^2 \approx \SI{543}{\kilo} \]
+
+  Since $2 \times n \times timesteps$ normally distributed random variables are
+  needed, for \num{e4} timesteps this corresponds to approximately 10 billion
+  random variables.
+  It took about 10 minutes on my laptop for \SI{500}{\kilo} samples and \num{e4}
+  time steps.
+
+  To arrive an accuracy of $TOL=\num{5e-3}$, which corresponds to an increase of
+  accuracy by a factor of 10, a factor of 100 times more samples would be needed.
+  Assuming the machine has enough memory and the computational time scales
+  lineary with the number of sampled random variables, roughly \SI{17}{\hour}
+  would be needed for this accuracy.
+    
 \end{enumerate}
 
 \end{enumerate}
