@@ -11,7 +11,7 @@ K = 100
 
 r = 0.04
 alpha = 100
-rho = 0.3
+rho = -0.3
 
 mc_samples = 10**4
 

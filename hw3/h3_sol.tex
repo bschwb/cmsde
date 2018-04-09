@@ -7,13 +7,16 @@
 \chead{CMSDE HW3}
 \ohead{\today}
 
+\usepackage{siunitx}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{commath}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
+\usepackage{hyperref}
 \usepackage[noabbrev]{cleveref}
 \usepackage{graphicx}
+\usepackage{listings}
 
 \newcommand*{\E}{\mathbb{E}}
 \newcommand*{\EV}[1]{\E\left[{#1}\right]}
@@ -218,14 +221,39 @@
       &=& \frac{1}{2+\alpha\Dt}
     \end{IEEEeqnarray*}
 
-    \item Interpration:
+    \item Interpretation:
       Seems like variance is better for forward Euler.
   \end{enumerate}
 
   \item
+    I implemented the following Forward Euler method
+    \begin{IEEEeqnarray*}{rCl}
+      S_{n+1} - S_n &=& r S_n \Dt + e^{Y_n} S_n \DW_n \\
+      Y_{n+1} - Y_n &=& \left(-\alpha(2+Y_n) + 0.4\sqrt{\alpha}
+        \sqrt{1-\rho^2}\right) \Dt + 0.4 \sqrt{\alpha} \Delta\hat{Z}_n \\
+      \hat{Z}_n &=& \rho W_n + \sqrt{1-\rho^2} Z_n
+    \end{IEEEeqnarray*}
+
+    The parameters used where $\alpha=100, r=0.04, T=\frac{3}{4}, Y_0 = -1,
+    S_0=K=100$ and $\rho=-0.3$.
+
+    With \num{e4} Monte Carlo samples and \num{e3} equidistant time steps I
+    get for the option value
+    \[ e^{-rT} \EV{\max{(S(T) - K, 0)}} = \num{6.92}\]
+    % The code can be found in \cref{lst:ex2}.
+
   \item
 \end{enumerate}
 
 \end{enumerate}
+
+% \section{Code Appendix}
+
+% All code can be found online at
+% \url{https://github.com/bschwb/cmsde/tree/master/hw3}
+
+% \begin{listings}
+%   \lstinputlisting{exercise2.py}
+% \end{listings}
 
 \end{document}
