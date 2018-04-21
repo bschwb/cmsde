@@ -1,0 +1,68 @@
+\documentclass[a4paper,11pt]{scrartcl}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+\usepackage[headsepline]{scrlayer-scrpage}
+\ihead{Bernd Schwarzenbacher}
+\chead{CMSDE HW4}
+\ohead{\today}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{commath}
+\usepackage{mathtools}
+\usepackage[retainorgcmds]{IEEEtrantools}
+
+\newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
+\newcommand*{\Dt}{\Delta{}t}
+
+\usepackage{enumitem}
+
+\begin{document}
+
+\begin{enumerate}
+
+\item
+
+\begin{enumerate}[leftmargin=1em]
+  \item
+    \[f(\theta,y) \coloneqq (\theta - y)^2 \Rightarrow
+      \frac{\partial{}f}{\partial{}\theta} = 2 (\theta - y) \]
+
+    I prove by induction:
+    \begin{itemize}
+      \item \[\EV{\theta_0^2} = 1 \leq C\]
+
+      \item
+        \begin{IEEEeqnarray*}{rCl}
+          \EV{\theta_{n+1}^2} &=& \EV{\left(\theta_n - \Dt
+              \frac{\partial{}f}{\partial{}\theta}(\theta_n, Y_n)\right)^2}
+          = \EV{\left(\theta_n-2\Dt(\theta_n-Y_n)\right)^2}\\
+          &=& \EV{\theta_{n}^2} - 4 \Dt \EV{\theta_n(\theta_n-Y_n)} + 4 \Dt^2
+          \EV{(\theta_n-Y_n)^2} \\
+          &=& \EV{\theta_n^2} - 4\Dt\EV{\theta_n^2} + 4 \Dt \EV{\theta_n Y_n} +
+          4\Dt^2\EV{\theta_n^2} - 8\Dt^2\EV{\theta_n Y_n} + 4 \Dt^2 \EV{Y_n^2} \\
+          &=& \EV{\theta_n^2} (1 - 4\Dt + 4\Dt^2) + 4\Dt^2 \leq C ( 1-4\Dt+4\Dt^2) +
+          4 \Dt^2
+        \end{IEEEeqnarray*}
+
+        The last expression should be smaller than $C$:
+        \begin{IEEEeqnarray*}{rCl}
+          C(1 - 4\Dt + 4\Dt^2) + 4\Dt^2 $\leq$ C \\
+          C(-4\Dt + 4\Dt^2) + 4\Dt^2 $\leq$ 0 \\
+          \frac{4\Dt^2}{4\Dt - 4\Dt^2} $\leq$ C \\
+          \frac{\Dt}{1 - \Dt} $\leq$ C \\
+        \end{IEEEeqnarray*}
+
+        \[\EV{f(\theta,Y)} = \EV{\left(\theta-Y\right)^2} = \EV{\theta^2} -
+          2\EV{\theta Y} + \EV{Y^2} = \theta^2 + 1\]
+        is smallest for $\theta = 0$.
+        
+        No convergence?
+    \end{itemize}
+
+\end{enumerate}
+
+\end{enumerate}
+
+\end{document}
