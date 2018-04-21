@@ -13,6 +13,9 @@
 \usepackage{mathtools}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
+\usepackage[noabbrev]{cleveref}
+\usepackage{graphicx}
+
 \newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
 \newcommand*{\Dt}{\Delta{}t}
 
@@ -48,18 +51,27 @@
 
         The last expression should be smaller than $C$:
         \begin{IEEEeqnarray*}{rCl}
-          C(1 - 4\Dt + 4\Dt^2) + 4\Dt^2 $\leq$ C \\
-          C(-4\Dt + 4\Dt^2) + 4\Dt^2 $\leq$ 0 \\
-          \frac{4\Dt^2}{4\Dt - 4\Dt^2} $\leq$ C \\
-          \frac{\Dt}{1 - \Dt} $\leq$ C \\
+          C(1 - 4\Dt + 4\Dt^2) + 4\Dt^2 &\leq& C \\
+          C(-4\Dt + 4\Dt^2) + 4\Dt^2 &\leq& 0 \\
+          \frac{4\Dt^2}{4\Dt - 4\Dt^2} &\leq& C \\
+          \frac{\Dt}{1 - \Dt} &\leq& C
         \end{IEEEeqnarray*}
-
-        \[\EV{f(\theta,Y)} = \EV{\left(\theta-Y\right)^2} = \EV{\theta^2} -
-          2\EV{\theta Y} + \EV{Y^2} = \theta^2 + 1\]
-        is smallest for $\theta = 0$.
-        
-        No convergence?
     \end{itemize}
+
+    \[\EV{f(\theta,Y)} = \EV{\left(\theta-Y\right)^2} = \EV{\theta^2} -
+      2\EV{\theta Y} + \EV{Y^2} = \theta^2 + 1\]
+    is smallest for $\theta = 0$.
+
+    No convergence? Looking at the plot, we see some convergence rate, but then
+    oscillating within some bound around 0.
+
+    \item
+      \begin{figure}[h]
+        \centering
+        \includegraphics[width=\linewidth]{theta_conv.pdf}
+        \caption{$\theta$ convergence}
+        \label{fig:error_var}
+      \end{figure}
 
 \end{enumerate}
 
