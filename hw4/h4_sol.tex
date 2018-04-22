@@ -70,9 +70,9 @@
     \item
       \begin{figure}[h]
         \centering
-        \includegraphics[width=\linewidth]{theta_conv.pdf}
+        \includegraphics[width=\linewidth]{pic/theta_conv.pdf}
         \caption{$\theta$ convergence}
-        \label{fig:error_var}
+        \label{fig:theta_conv}
       \end{figure}
 
     \item
@@ -109,6 +109,59 @@
       \end{IEEEeqnarray*}
 
       So convergence rate is $O\left((1-\Dt)^n\right)$?
+\end{enumerate}
+
+\item
+
+\begin{enumerate}[leftmargin=1em]
+  \item
+    \begin{figure}[h]
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/learned_fun_5e-02.pdf}
+          \caption{Learned function $\Dt=0.05$}
+          \label{fig:learned_fun_0.05}
+        \end{minipage}%
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/test_error_5e-02.pdf}
+          \caption{Test error $\Dt=0.05$}
+          \label{fig:test_error_0.05}
+        \end{minipage}
+    \end{figure}
+    \begin{figure}[h]
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/learned_fun_5e-03.pdf}
+          \caption{Learned function $\Dt=0.005$}
+          \label{fig:learned_fun_0.005}
+        \end{minipage}%
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/test_error_5e-03.pdf}
+          \caption{Test error $\Dt=0.005$}
+          \label{fig:test_error_0.005}
+        \end{minipage}
+    \end{figure}
+    \begin{figure}[h]
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/learned_fun_5e-04.pdf}
+          \caption{Learned function $\Dt=0.0005$}
+          \label{fig:learned_fun_0.0005}
+        \end{minipage}%
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/test_error_5e-04.pdf}
+          \caption{Test error $\Dt=0.0005$}
+          \label{fig:test_error_0.0005}
+        \end{minipage}
+    \end{figure}
+
+  \item
+    How is the empirical loss function different from the already plotted
+    expected loss function?
+
 \end{enumerate}
 
 \end{enumerate}
