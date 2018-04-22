@@ -18,6 +18,8 @@
 
 \newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
 \newcommand*{\Dt}{\Delta{}t}
+\newcommand*{\DW}{\Delta{}W}
+\newcommand*{\fdt}{\frac{\partial{}f}{\partial{}\theta}}
 
 \usepackage{enumitem}
 
@@ -30,7 +32,7 @@
 \begin{enumerate}[leftmargin=1em]
   \item
     \[f(\theta,y) \coloneqq (\theta - y)^2 \Rightarrow
-      \frac{\partial{}f}{\partial{}\theta} = 2 (\theta - y) \]
+      \fdt = 2 (\theta - y) \]
 
     I prove by induction:
     \begin{itemize}
@@ -39,7 +41,7 @@
       \item
         \begin{IEEEeqnarray*}{rCl}
           \EV{\theta_{n+1}^2} &=& \EV{\left(\theta_n - \Dt
-              \frac{\partial{}f}{\partial{}\theta}(\theta_n, Y_n)\right)^2}
+              \fdt(\theta_n, Y_n)\right)^2}
           = \EV{\left(\theta_n-2\Dt(\theta_n-Y_n)\right)^2}\\
           &=& \EV{\theta_{n}^2} - 4 \Dt \EV{\theta_n(\theta_n-Y_n)} + 4 \Dt^2
           \EV{(\theta_n-Y_n)^2} \\
@@ -73,6 +75,40 @@
         \label{fig:error_var}
       \end{figure}
 
+    \item
+      Ornstein-Uhlenbeck process
+      \[ \dif{}X_t = \alpha(\mu-X_t)\dif{}s+\sigma\dif{}W \]
+      Forward Euler:
+      \[ X_{n+1} - X_n = \alpha(\mu - X_n) \Dt + \sigma \DW_n \]
+
+      \[\theta_{n+1} - \theta_n = 2 \Dt \theta_n - 2 \sqrt{\Dt} \DW_n)\]
+
+      Since $\DW_n = \sqrt{\Dt} Y_n$
+      $\alpha = 2, \mu = 0, \sigma = 2 \sqrt{\Dt}$
+
+      Is it okay, that $\Dt$ appears in the definition of $\sigma$?
+      It seems weird, because then the forward Euler method approximates a
+      different process for a different $\Dt$.
+
+      Gradient descent:
+      \begin{IEEEeqnarray*}{rCl}
+      \theta_{n+1} &=& \theta_n - \Dt \frac{\partial}{\partial{}\theta} \EV{(\theta_n - Y)^2}
+        = \theta_n - \Dt \frac{\partial}{\partial{}\theta}\left( \EV{\theta_n^2}
+        - 2 \EV{\theta_n Y} + \EV{Y^2}\right) \\
+      &=& \theta_n - \Dt \frac{\partial}{\partial{}\theta}\left(\theta_n^2 + 1\right)
+      = \theta_n - 2\Dt \theta_n
+      \end{IEEEeqnarray*}
+
+      Convergence rate:
+      \begin{IEEEeqnarray*}{rCl}
+      \EV{\theta_{n}^2} &=& \EV{\theta_{n-1}^2} - 4\Dt\EV{\theta_{n-1}^2} +
+      4\Dt^2\EV{\theta_{n-1}^2} \\
+      &=& \EV{\theta_{n-1}^2} (1 - 4\Dt + 4\Dt^2) \\
+      &=& \EV{\theta_0^2} (1 - 4\Dt + 4\Dt^2)^n
+      \underset{n\rightarrow\infty}{\longrightarrow} 0
+      \end{IEEEeqnarray*}
+
+      So convergence rate is $O\left((1-\Dt)^n\right)$?
 \end{enumerate}
 
 \end{enumerate}

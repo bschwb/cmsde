@@ -19,12 +19,12 @@ def neural_network_model(inp):
     activation_fcn_1 = tf.nn.sigmoid
     activation_fcn_output = None
     num_output_nodes = 1
-    
+
     hidden_layer_1 = tf.layers.dense(inputs=inp,
                                      units=K,
                                      activation=activation_fcn_1,
                                      kernel_initializer=initializer())
-    
+
     output = tf.layers.dense(inputs=hidden_layer_1,
                              units=num_output_nodes,
                              activation=activation_fcn_output,
@@ -38,19 +38,19 @@ def train_neural_network(sess):
     optimizer = tf.train.GradientDescentOptimizer(dt)
     train = optimizer.minimize(cost)
     E_1 = []
-    
+
     sess.run(tf.global_variables_initializer())
-    
+
     for m in range(0, M):
         n = np.random.randint(0, N)
         x_in = x_training[n:n + 1]
         sess.run(train, feed_dict = {inp:x_in})
-        
+
         if m % int(M/100) == 0:
             E_1.append(cost.eval(feed_dict={inp:x_test}))
         if m % int(M/10) == 0:
             print(m)
-            
+
     return alpha, E_1
 
 pts = np.linspace(-4,4,300).reshape(-1,1)
