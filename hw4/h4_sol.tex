@@ -162,6 +162,23 @@
     How is the empirical loss function different from the already plotted
     expected loss function?
 
+  \item $K=1$
+    I observe faster convergence in \cref{fig:test_error_K1} in comparison to \cref{fig:test_error_0.005}.
+    \begin{figure}[h]
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/learned_fun_K1.pdf}
+          \caption{Learned function $\Dt=0.005, K=1$}
+          \label{fig:learned_fun_K1}
+        \end{minipage}%
+        \begin{minipage}[b]{.5\linewidth}
+          \centering
+          \includegraphics[width=\linewidth]{pic/test_error_K1.pdf}
+          \caption{Test error $\Dt=0.005, K=1$}
+          \label{fig:test_error_K1}
+        \end{minipage}
+    \end{figure}
+
 \end{enumerate}
 
 \end{enumerate}
