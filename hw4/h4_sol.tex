@@ -16,6 +16,7 @@
 \usepackage[noabbrev]{cleveref}
 \usepackage{graphicx}
 
+\newcommand*{\R}{\mathbb{R}}
 \newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
 \newcommand*{\Dt}{\Delta{}t}
 \newcommand*{\DW}{\Delta{}W}
@@ -214,7 +215,23 @@
         \end{minipage}
     \end{figure}
 
+    \item
+     \[\min_{\theta\in\Theta} \EV{\left( \alpha_\theta(X) - f(X) \right)^2}\]
+     \[f(x) = \left(x-\frac{1}{2}\right)^T\left(x-\frac{1}{2}\right), \quad
+      x \in G \subset \R^d\]
+      where $X \sim \mathcal{U}(G)$.
+      \[\alpha_\theta(x) = \sum^K_{k=1}\phi_k^1\sigma\left( x^T \theta^2_k +
+          \theta^3_k \right), \quad x \in G, \quad
+        \theta = \left(\theta^1_k, \theta^2_k, \theta^3_k\right) \in \Theta = \R^K \times
+        \R^{d\times K} \times \R^K\]
+      with some activation function $\sigma(x)$.
 
+    \begin{figure}[h]
+      \centering
+      \includegraphics[width=\linewidth]{pic/test_error_3dim.pdf}
+      \caption{Test error 3-dimensional}
+      \label{fig:multidim}
+    \end{figure}
 \end{enumerate}
 
 \end{enumerate}
