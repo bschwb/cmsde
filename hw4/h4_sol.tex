@@ -123,8 +123,14 @@
 
 \begin{enumerate}[leftmargin=1em]
   \item
-  In \crefrange{fig:learned_fun_0.05}{fig:test_error_0.0005} we see, that we get
-  the best result for $\Dt = 0.005$.
+    By increasing the step size $\Dt$ I observe faster convergence with more
+    oscillation in the error.
+    This makes sense, since big steps are taken into the right direction when
+    minimizing, but it is also easier to overshoot.
+    In contrast lowering the step size leads to slow convergence, but only small oscillations.
+    The described behavior can be observed in the exemplary
+    \crefrange{fig:learned_fun_0.05}{fig:test_error_0.0005}.
+
     \begin{figure}[H]
         \begin{minipage}[b]{.5\linewidth}
           \centering
