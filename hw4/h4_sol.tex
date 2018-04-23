@@ -15,6 +15,7 @@
 
 \usepackage{hyperref}
 \usepackage[noabbrev]{cleveref}
+\usepackage{float}
 \usepackage{graphicx}
 \usepackage{listings}
 \lstset{language=Python,
@@ -39,91 +40,90 @@
 
 \begin{enumerate}[leftmargin=1em]
   \item
+    To obtain the a bound for the iterated parameters I first note that
     \[f(\theta,y) \coloneqq (\theta - y)^2 \Rightarrow
       \fdt = 2 (\theta - y) \]
 
-    I prove by induction:
-    \begin{itemize}
-      \item \[\EV{\theta_0^2} = 1 \leq C\]
+    which is used to compute the following.
+      \begin{IEEEeqnarray*}{rCl}
+        \EV{\theta_{n+1}^2} &=& \EV{\left(\theta_n - \Dt
+            \fdt(\theta_n, Y_n)\right)^2}
+        = \EV{\left(\theta_n-2\Dt(\theta_n-Y_n)\right)^2}\\
+        &=& \EV{\theta_{n}^2} - 4 \Dt \EV{\theta_n(\theta_n-Y_n)} + 4 \Dt^2
+        \EV{(\theta_n-Y_n)^2} \\
+        &=& \EV{\theta_n^2} - 4\Dt\EV{\theta_n^2} + 4 \Dt \EV{\theta_n Y_n} +
+        4\Dt^2\EV{\theta_n^2} - 8\Dt^2\EV{\theta_n Y_n} + 4 \Dt^2 \EV{Y_n^2} \\
+        &=& \EV{\theta_n^2} (1 - 4\Dt + 4\Dt^2) + 4\Dt^2 = \EV{\theta_n^2} (1 -
+        2\Dt)^2 + 4\Dt^2 \\
+        &=& \EV{\theta_0^2} (1-2\Dt)^{2(n+1)} + 4 \Dt^2 \sum^{n}_{i=0}
+        (1-2\Dt)^{2k}
+      \end{IEEEeqnarray*}
+      For the next steps to be valid, I need $0 < \Dt < 0.5$ or $0.5 < \Dt < 1$.
+      \begin{IEEEeqnarray*}{rCl}
+        &=& \EV{\theta_0^2} (1-2\Dt)^{2(n+1)} + 4 \Dt^2 \frac{1 -
+          (1-2\Dt)^{2n}}{1 - (1 - 2\Dt)^2} \\
+        &\leq& \EV{\theta_0^2} + 4\Dt^2
+      \end{IEEEeqnarray*}
 
-      \item
-        \begin{IEEEeqnarray*}{rCl}
-          \EV{\theta_{n+1}^2} &=& \EV{\left(\theta_n - \Dt
-              \fdt(\theta_n, Y_n)\right)^2}
-          = \EV{\left(\theta_n-2\Dt(\theta_n-Y_n)\right)^2}\\
-          &=& \EV{\theta_{n}^2} - 4 \Dt \EV{\theta_n(\theta_n-Y_n)} + 4 \Dt^2
-          \EV{(\theta_n-Y_n)^2} \\
-          &=& \EV{\theta_n^2} - 4\Dt\EV{\theta_n^2} + 4 \Dt \EV{\theta_n Y_n} +
-          4\Dt^2\EV{\theta_n^2} - 8\Dt^2\EV{\theta_n Y_n} + 4 \Dt^2 \EV{Y_n^2} \\
-          &=& \EV{\theta_n^2} (1 - 4\Dt + 4\Dt^2) + 4\Dt^2 \leq C ( 1-4\Dt+4\Dt^2) +
-          4 \Dt^2
-        \end{IEEEeqnarray*}
+    With $\theta_0 = 1$ I can use $C \geq 5$ as an upper bound for all $\Dt \in
+    (0, 0.5) \cup (0.5, 1)$.
 
-        The last expression should be smaller than $C$:
-        \begin{IEEEeqnarray*}{rCl}
-          C(1 - 4\Dt + 4\Dt^2) + 4\Dt^2 &\leq& C \\
-          C(-4\Dt + 4\Dt^2) + 4\Dt^2 &\leq& 0 \\
-          \frac{4\Dt^2}{4\Dt - 4\Dt^2} &\leq& C \\
-          \frac{\Dt}{1 - \Dt} &\leq& C
-        \end{IEEEeqnarray*}
-    \end{itemize}
-
+    To obtain $\theta_*$, I compute
     \[\EV{f(\theta,Y)} = \EV{\left(\theta-Y\right)^2} = \EV{\theta^2} -
       2\EV{\theta Y} + \EV{Y^2} = \theta^2 + 1\]
-    is smallest for $\theta = 0$.
+    This expression obtains its minimum for $\theta_* = 0$.
+    So we can use the previous computation for the limit and get
+    \begin{IEEEeqnarray*}{rCl}
+    \underset{n\rightarrow\infty}\lim\EV{\left( \theta_n - \theta_* \right)^2}
+      &=& \underset{n\rightarrow\infty}\lim\EV{(\theta_n)^2} \\
+      &=& \underset{n\rightarrow\infty}\lim \EV{\theta_0^2}(1-2\Dt)^{2n} +
+      \frac{4\Dt^2}{4\Dt - 4\Dt^2} (1 - (1 - 2\Dt)^{2n}) \\
+      &=&  \frac{\Dt}{1 - \Dt}
+    \end{IEEEeqnarray*}
 
-    No convergence? Looking at the plot, we see some convergence rate, but then
-    oscillating within some bound around 0.
+    And the convergence rate is
+    \[ \EV{\left(\theta_n - \theta_* \right)^2} - \frac{\Dt}{1 - \Dt}
+    = \left(1 + \frac{\Dt}{1-\Dt}\right) (1-2\Dt)^{2n}\]
 
     \item
-      \begin{figure}[h]
+      The code can be found in listing~\ref{lstex1b} and the exponential
+      convergence for $\theta$ is plotted in \cref{fig:theta_conv}.
+
+      \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{pic/theta_conv.pdf}
-        \caption{$\theta$ convergence}
+        \caption{$\theta$ convergence for $\Dt = 0.0001$}
         \label{fig:theta_conv}
       \end{figure}
 
     \item
-      Ornstein-Uhlenbeck process
-      \[ \dif{}X_t = \alpha(\mu-X_t)\dif{}s+\sigma\dif{}W \]
-      Forward Euler:
+      The Ornstein-Uhlenbeck process is defined by the SDE
+      \[ \dif{}X_t = \alpha(\mu-X_t)\dif{}s+\sigma\dif{}W, \quad X_0 = 1 \]
+      The forward Euler approximation for it
       \[ X_{n+1} - X_n = \alpha(\mu - X_n) \Dt + \sigma \DW_n \]
+      in comparison to the $\theta$ iteration
+      \[\theta_{n+1} - \theta_n = 2 \Dt \theta_n - 2 \sqrt{\Dt} \DW_n\]
+      with $\DW_n = \sqrt{\Dt} Y_n$ leads us to identify
+      $\alpha = 2, \mu = 0, \sigma = 2 \sqrt{\Dt}$.
 
-      \[\theta_{n+1} - \theta_n = 2 \Dt \theta_n - 2 \sqrt{\Dt} \DW_n)\]
-
-      Since $\DW_n = \sqrt{\Dt} Y_n$
-      $\alpha = 2, \mu = 0, \sigma = 2 \sqrt{\Dt}$
-
-      Is it okay, that $\Dt$ appears in the definition of $\sigma$?
-      It seems weird, because then the forward Euler method approximates a
-      different process for a different $\Dt$.
-
-      Gradient descent:
+      The gradient descent method looks like the following:
       \begin{IEEEeqnarray*}{rCl}
       \theta_{n+1} &=& \theta_n - \Dt \frac{\partial}{\partial{}\theta} \EV{(\theta_n - Y)^2}
         = \theta_n - \Dt \frac{\partial}{\partial{}\theta}\left( \EV{\theta_n^2}
         - 2 \EV{\theta_n Y} + \EV{Y^2}\right) \\
       &=& \theta_n - \Dt \frac{\partial}{\partial{}\theta}\left(\theta_n^2 + 1\right)
-      = \theta_n - 2\Dt \theta_n
+      = \theta_n - 2\Dt \theta_n = \theta_0 (1 - 2\Dt)^{n+1}
       \end{IEEEeqnarray*}
-
-      Convergence rate:
-      \begin{IEEEeqnarray*}{rCl}
-      \EV{\theta_{n}^2} &=& \EV{\theta_{n-1}^2} - 4\Dt\EV{\theta_{n-1}^2} +
-      4\Dt^2\EV{\theta_{n-1}^2} \\
-      &=& \EV{\theta_{n-1}^2} (1 - 4\Dt + 4\Dt^2) \\
-      &=& \EV{\theta_0^2} (1 - 4\Dt + 4\Dt^2)^n
-      \underset{n\rightarrow\infty}{\longrightarrow} 0
-      \end{IEEEeqnarray*}
-
-      So convergence rate is $O\left((1-\Dt)^n\right)$?
+      So convergence rate for it is similar to the stochastic gradient method,
+      but it will convergence against the correct $\theta_* = 0$ instead of
+      against $\frac{\Dt}{1 - \Dt}$.
 \end{enumerate}
 
 \item
 
 \begin{enumerate}[leftmargin=1em]
   \item
-    \begin{figure}[h]
+    \begin{figure}[H]
         \begin{minipage}[b]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/learned_fun_5e-02.pdf}
@@ -137,7 +137,7 @@
           \label{fig:test_error_0.05}
         \end{minipage}
     \end{figure}
-    \begin{figure}[h]
+    \begin{figure}[H]
         \begin{minipage}[b]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/learned_fun_5e-03.pdf}
@@ -151,7 +151,7 @@
           \label{fig:test_error_0.005}
         \end{minipage}
     \end{figure}
-    \begin{figure}[h]
+    \begin{figure}[H]
         \begin{minipage}[b]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/learned_fun_5e-04.pdf}
@@ -167,7 +167,7 @@
     \end{figure}
 
   \item
-    \begin{figure}[h]
+    \begin{figure}[H]
       \centering
       \includegraphics[width=\linewidth]{pic/exp_vs_emp_loss.pdf}
       \caption{Empirical loss function $E_a$ and expected loss function $E_1$
@@ -178,17 +178,17 @@
   \item
     There is fast convergence for $K=1$ (see \cref{fig:test_error_K1}) since we
     only have a few parameters to train.
-    The function fit is bad, since there are only parameters to fit a single
-    sigmoid function.
+    The function fit is bad, since there are only enough parameters to fit a single
+    sigmoid function and thus the quadratic function can not be approximated (\cref{fig:learned_fun_K1}).
 
-    \begin{figure}[h]
-        \begin{minipage}[b]{.5\linewidth}
+    \begin{figure}[H]
+        \begin{minipage}[t]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/learned_fun_K1.pdf}
           \caption{Learned function $\Dt=0.005, K=1$}
           \label{fig:learned_fun_K1}
         \end{minipage}%
-        \begin{minipage}[b]{.5\linewidth}
+        \begin{minipage}[t]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/test_error_K1.pdf}
           \caption{Test error $\Dt=0.005, K=1$}
@@ -213,7 +213,7 @@
      empirical and expected loss function.
      The model is overfitted.
 
-    \begin{figure}[h]
+    \begin{figure}[H]
         \centering
         \includegraphics[width=\linewidth]{pic/exp_vs_emp_loss_overfit.pdf}
         \caption{Expected and empirical loss functions for $N=K=10$}
@@ -226,16 +226,16 @@
      values, and nothing can be approximated. (see \cref{fig:learned_fun_bias})
      For the sinus activation function, the bias shift doesn't matter, since it is
      periodic and has no flat sections.
-     So a decent function fit is obtained, as seen in \cref{fig:lerned_fun_sin}.
+     So a decent function fit is obtained, as seen in \cref{fig:learned_fun_sin}.
 
-    \begin{figure}[h]
-        \begin{minipage}[b]{.5\linewidth}
+    \begin{figure}[H]
+        \begin{minipage}[t]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/learned_fun_bias.pdf}
           \caption{Learned function $\Dt=0.005$ with bias}
           \label{fig:learned_fun_bias}
         \end{minipage}%
-        \begin{minipage}[b]{.5\linewidth}
+        \begin{minipage}[t]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/test_error_bias.pdf}
           \caption{Test error $\Dt=0.005$ with bias}
@@ -243,7 +243,7 @@
         \end{minipage}
     \end{figure}
 
-    \begin{figure}[h]
+    \begin{figure}[H]
         \begin{minipage}[b]{.5\linewidth}
           \centering
           \includegraphics[width=\linewidth]{pic/learned_fun_sin.pdf}
@@ -269,7 +269,7 @@
         \R^{d\times K} \times \R^K\]
       with some activation function $\sigma(x)$.
 
-    \begin{figure}[h]
+    \begin{figure}[H]
       \centering
       \includegraphics[width=\linewidth]{pic/test_error_3dim.pdf}
       \caption{Test error 3-dimensional}
