@@ -58,16 +58,6 @@ pts = np.linspace(-4,4,300).reshape(-1,1)
 
 with tf.Session() as sess:
     alpha, E_1 = train_neural_network(sess)
-    # training_data_vals = target_fcn.eval(feed_dict={inp:x_training})
-    # target_fcn_vals = target_fcn.eval(feed_dict={inp:pts})
-    # alpha_vals = alpha.eval(feed_dict={inp:pts})
-
-# plt.figure('Learned function', figsize=(15,10));
-# plt.plot(x_training, training_data_vals, 'o', label='Training data')
-# plt.plot(pts, target_fcn_vals, label='Target function')
-# plt.plot(pts, alpha_vals, label='alpha')
-# plt.legend()
-# plt.show()
 
 plt.figure('Test error', figsize=(15,10));
 plt.semilogy(np.linspace(0, T, len(E_1)), E_1, label='E_1')

@@ -13,8 +13,15 @@
 \usepackage{mathtools}
 \usepackage[retainorgcmds]{IEEEtrantools}
 
+\usepackage{hyperref}
 \usepackage[noabbrev]{cleveref}
 \usepackage{graphicx}
+\usepackage{listings}
+\lstset{language=Python,
+  frame=single,
+  breaklines=true,
+  captionpos=b
+}
 
 \newcommand*{\R}{\mathbb{R}}
 \newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
@@ -168,8 +175,12 @@
       \label{fig:empirical_loss}
     \end{figure}
 
-  \item $K=1$
-    I observe faster convergence in \cref{fig:test_error_K1} in comparison to \cref{fig:test_error_0.005}.
+  \item
+    There is fast convergence for $K=1$ (see \cref{fig:test_error_K1}) since we
+    only have a few parameters to train.
+    The function fit is bad, since there are only parameters to fit a single
+    sigmoid function.
+
     \begin{figure}[h]
         \begin{minipage}[b]{.5\linewidth}
           \centering
@@ -186,8 +197,18 @@
     \end{figure}
 
    \item
+     In \cref{fig:test_error_K1} we observe, that we need around 10 samples for
+     the single node.
+     Assuming this scales linearly, we need in the order of 10 samples per node.
+     So the 100 samples for 10 nodes seem to be the right order of magnitude.
 
    \item
+     To obtain a small value for the empirical cost function, but a large value
+     for the expected cost function, the model needs to overfit.
+     This means to make the model highly dependent on the training data, but bad
+     to generalize.
+     We can achieve this with a low number of computations $M$ for a high number
+     of nodes $K$.
 
    \item
     \begin{figure}[h]
@@ -240,5 +261,16 @@
 \end{enumerate}
 
 \end{enumerate}
+ 
+\section*{Code Appendix}
+
+All code can be found online at
+\url{https://github.com/bschwb/cmsde/tree/master/hw4}
+
+\lstset{caption={Code for 1b}, label=lstex1b}
+\lstinputlisting{exercise1b.py}
+
+\lstset{caption={Code for 2g}, label=lstex2g}
+\lstinputlisting{exercise2g.py}
 
 \end{document}

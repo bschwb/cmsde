@@ -32,7 +32,7 @@ def neural_network_model(inp):
     output = tf.layers.dense(inputs=hidden_layer_1,
                              units=num_output_nodes,
                              activation=activation_fcn_output,
-                             use_bias=False,
+                             use_bias=True,
                              kernel_initializer=initializer())
     return output
 
