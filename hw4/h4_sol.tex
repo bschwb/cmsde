@@ -207,8 +207,18 @@
      for the expected cost function, the model needs to overfit.
      This means to make the model highly dependent on the training data, but bad
      to generalize.
-     We can achieve this with a low number of computations $M$ for a high number
-     of nodes $K$.
+     We can achieve this with a number of samples $N$ in order of the number of
+     nodes $K$.
+     In \cref{fig:exp_vs_emp_overfit} we see a big difference between the
+     empirical and expected loss function.
+     The model is overfitted.
+
+    \begin{figure}[h]
+        \centering
+        \includegraphics[width=\linewidth]{pic/exp_vs_emp_loss_overfit.pdf}
+        \caption{Expected and empirical loss functions for $N=K=10$}
+        \label{fig:exp_vs_emp_overfit}
+    \end{figure}
 
    \item
     \begin{figure}[h]
