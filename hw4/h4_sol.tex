@@ -123,6 +123,8 @@
 
 \begin{enumerate}[leftmargin=1em]
   \item
+  In \crefrange{fig:learned_fun_0.05}{fig:test_error_0.0005} we see, that we get
+  the best result for $\Dt = 0.005$.
     \begin{figure}[H]
         \begin{minipage}[b]{.5\linewidth}
           \centering
@@ -167,6 +169,8 @@
     \end{figure}
 
   \item
+    The empirical loss function $E_a$ uses the training data to compute the loss.
+    It is plotted in \cref{fig:empirical_loss} along with the expected loss function. 
     \begin{figure}[H]
       \centering
       \includegraphics[width=\linewidth]{pic/exp_vs_emp_loss.pdf}
@@ -178,8 +182,9 @@
   \item
     There is fast convergence for $K=1$ (see \cref{fig:test_error_K1}) since we
     only have a few parameters to train.
-    The function fit is bad, since there are only enough parameters to fit a single
-    sigmoid function and thus the quadratic function can not be approximated (\cref{fig:learned_fun_K1}).
+    This comes with the big trade-off, that the function fit is really bad,
+    since there are only enough parameters to fit a single sigmoid function
+    and thus the quadratic function can not be properly approximated (\cref{fig:learned_fun_K1}).
 
     \begin{figure}[H]
         \begin{minipage}[t]{.5\linewidth}
@@ -221,9 +226,10 @@
     \end{figure}
 
    \item
-     With a bias between $20\pi$ and $22\pi$, the sigmoid activation function is
-     only evaluated at the top flat section, so there is no distinction in
-     values, and nothing can be approximated. (see \cref{fig:learned_fun_bias})
+     With a bias in $[20\pi, 22\pi]$, the sigmoid activation function is
+     only evaluated at the top flat section.
+     There is no distinction in values and thus no interesting function can be approximated.
+     (see \cref{fig:learned_fun_bias})
      For the sinus activation function, the bias shift doesn't matter, since it is
      periodic and has no flat sections.
      So a decent function fit is obtained, as seen in \cref{fig:learned_fun_sin}.
@@ -259,20 +265,28 @@
     \end{figure}
 
     \item
+      The multidimensional minimization problem is similar, with the difference
+      of the target function $f$ taking a vector now
      \[\min_{\theta\in\Theta} \EV{\left( \alpha_\theta(X) - f(X) \right)^2}\]
-     \[f(x) = \left(x-\frac{1}{2}\right)^T\left(x-\frac{1}{2}\right), \quad
-      x \in G \subset \R^d\]
-      where $X \sim \mathcal{U}(G)$.
+     \[f(x) = \norm{x-\frac{1}{2}}^2, \quad x \in G \subset \R^d\]
+      where $X \sim \mathcal{U}(-4, 4)^d$.
+      The activation function also needs more parameters now
       \[\alpha_\theta(x) = \sum^K_{k=1}\phi_k^1\sigma\left( x^T \theta^2_k +
           \theta^3_k \right), \quad x \in G, \quad
         \theta = \left(\theta^1_k, \theta^2_k, \theta^3_k\right) \in \Theta = \R^K \times
         \R^{d\times K} \times \R^K\]
       with some activation function $\sigma(x)$.
+      Due to the increase in parameters, generally more training samples are needed.
+      Also to approximate a higher dimensional function, more nodes might be
+      needed which again corresponds to an increase in training samples.
+
+      The code for this problem can be found in listing~\ref{lstex2g} and the
+      test error plot for a 3-dimensional problem is given in \cref{fig:multidim}.
 
     \begin{figure}[H]
       \centering
       \includegraphics[width=\linewidth]{pic/test_error_3dim.pdf}
-      \caption{Test error 3-dimensional}
+      \caption{Test error 3-dimensional with $\Dt=0.001, N=1000, K=20, M=60000$}
       \label{fig:multidim}
     \end{figure}
 \end{enumerate}

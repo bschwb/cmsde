@@ -2,10 +2,10 @@ import tensorflow as tf
 import numpy as np
 import matplotlib.pyplot as plt
 
-N = 100
-K = 10
-M = 40000
-dt = 0.005
+N = 10000
+K = 20
+M = 60000
+dt = 0.001
 T = M*dt
 d = 3
 
@@ -13,7 +13,7 @@ inp = tf.placeholder(dtype = tf.float32, shape = (None, d))
 
 x_training = np.random.uniform(-4,4,size=(N,d))
 x_test = np.random.uniform(-4,4,size=(100,d))
-target_fcn = tf.square(tf.abs(inp - 0.5))
+target_fcn = tf.square(tf.norm(inp - 0.5, axis=1, keepdims=True))
 
 def neural_network_model(inp):
     initializer = tf.initializers.random_normal
