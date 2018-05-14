@@ -5,7 +5,7 @@ from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/tmp/data/", one_hot = True)
 
 K = 500
-M = 5000
+M = 10000
 dt = 1
 N = 100
 n_pixels = 784
@@ -36,7 +36,7 @@ def neural_network_model(inp):
 def train_neural_network(sess):
     alpha = neural_network_model(inp)
     cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=alpha, labels=label))
-    optimizer = tf.train.GradientDescentOptimizer(dt)
+    optimizer = tf.train.AdamOptimizer()
     train = optimizer.minimize(cost)
     E_1 = []
 
