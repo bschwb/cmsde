@@ -25,7 +25,17 @@ def neural_network_model(inp):
                                      activation=activation_fcn_1,
                                      kernel_initializer=initializer())
 
-    output = tf.layers.dense(inputs=hidden_layer_1,
+    hidden_layer_2 = tf.layers.dense(inputs=hidden_layer_1,
+                                     units=K,
+                                     activation=activation_fcn_1,
+                                     kernel_initializer=initializer())
+
+    hidden_layer_3 = tf.layers.dense(inputs=hidden_layer_2,
+                                     units=K,
+                                     activation=activation_fcn_1,
+                                     kernel_initializer=initializer())
+
+    output = tf.layers.dense(inputs=hidden_layer_3,
                              units=num_output_nodes,
                              activation=activation_fcn_output,
                              use_bias=False,

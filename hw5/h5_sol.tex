@@ -18,7 +18,9 @@
 \usepackage{float}
 \usepackage{graphicx}
 
-\usepackage{enumitem}
+\newcommand*{\R}{\mathbb{R}}
+\newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
+\newcommand*{\bt}{\bold{\theta}}
 
 \begin{document}
 
@@ -36,6 +38,19 @@
   accuracy of $0.9503$.
 
 \item
+  The new optimization problem is
+  \[ \min_{\bt \in \R^{(784+1)\times K + 2 (K+1) \times K + 10 \times K}} \EV{H(y(X), S(\alpha_\bt(X)))}\]
+  for the random handwritten digit $X \in \R^{784}$. The neural network
+  $\alpha_\bt(x)$ with 3 hidden layers, where each hidden layer has $K$ units plus a bias unit.
+  It can be written as:
+  \[ \alpha_\bt(x) = r(\Theta_3 r(\Theta_2 r(\Theta_1 x + \theta_1) + \theta_2)
+    + \theta_3) x \in \R^{784} \]
+
+  with the ReLU activation unit:
+  \[ r(x) = \max(0, x)\]
+
+  The accuracy only improved a little bit to $0.9559$.
+
 
 \item
 
@@ -43,7 +58,7 @@
 
 
 \end{enumerate}
- 
+
 \section*{Code Appendix}
 
 All code can be found online at
