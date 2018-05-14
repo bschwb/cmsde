@@ -11,12 +11,14 @@
 \usepackage{amssymb}
 \usepackage{commath}
 \usepackage{mathtools}
-\usepackage[retainorgcmds]{IEEEtrantools}
 
 \usepackage{hyperref}
-\usepackage[noabbrev]{cleveref}
-\usepackage{float}
-\usepackage{graphicx}
+\usepackage{listings}
+\lstset{language=Python,
+  frame=single,
+  breaklines=true,
+  captionpos=b
+}
 
 \newcommand*{\R}{\mathbb{R}}
 \newcommand*{\EV}[1]{\mathbb{E}\left[{#1}\right]}
@@ -39,35 +41,47 @@
 
 \item
   The new optimization problem is
-  \[ \min_{\bt \in \R^{(784+1)\times K + 2 (K+1) \times K + 10 \times K}} \EV{H(y(X), S(\alpha_\bt(X)))}\]
-  for the random handwritten digit $X \in \R^{784}$. The neural network
-  $\alpha_\bt(x)$ with 3 hidden layers, where each hidden layer has $K$ units plus a bias unit.
+  \[ \min_{\bt \in \R^{((784 + 1) + 2 (K+1) + 10) \times K}} \EV{H(y(X), S(\alpha_\bt(X)))}\]
+  for the random handwritten digit $X \in \R^{784}$ with the corresponding
+  one-hot label $y(X)$.
+  $\alpha_\bt(x)$ is the neural network with 3 hidden layers,
+  where each hidden layer has $K$ units plus a bias unit.
   It can be written as:
-  \[ \alpha_\bt(x) = r(\Theta_3 r(\Theta_2 r(\Theta_1 x + \theta_1) + \theta_2)
-    + \theta_3) x \in \R^{784} \]
+  \[ \alpha_\bt(x) = \bold{\Theta_4} \cdot r(\bold{\Theta_3} \cdot
+    r(\bold{\Theta_2} \cdot r(\bold{\Theta_1} \cdot x + \bold{\theta_1}) + \bold{\theta_2})
+    + \bold{\theta_3}), \; x \in \R^{784} \]
+  \[ \bold{\Theta_1} \in \R^{K \times 784}, \bold{\Theta_2} \in \R^{K \times
+      K}, \bold{\Theta_3} \in \R^{K \times K}, \bold{\Theta_4} \in \R^{10 \times
+    K}\]
+\[ \bold{\theta_1} \in \R^K, \bold{\theta_2} \in \R^K, \bold{\theta_2} \in \R^K\]
 
-  with the ReLU activation unit:
+  with the ReLU activation unit (vectorized for the above neural network notation):
   \[ r(x) = \max(0, x)\]
+  We still use the cross-entropy function
+  \[H(\bold{y}, \bold{z}) = -\sum^{10}_{i=1}y_i \log(z_i), \quad \bold{y}, \bold{z}
+    \in \R^{10} \]
+  and the softmax function
+  \[ S(\bold{z}) = \left(
+      \frac{e^{z_1}}{\sum^{10}_{i=1} e^{z_i}},
+      \frac{e^{z_2}}{\sum^{10}_{i=1} e^{z_i}},
+      \dots
+      \frac{e^{z_10}}{\sum^{10}_{i=1} e^{z_i}},
+    \right), \quad \bold{z} \in \R^{10}\]
 
   The accuracy only improved a little bit to $0.9559$.
 
 
 \item
-
-\item
-
+Increasing the number of nodes per layer $K$ to $600$ increased the accuracy to $0.9661$.
 
 \end{enumerate}
 
 \section*{Code Appendix}
 
-All code can be found online at
+The final code can also be found online at\\
 \url{https://github.com/bschwb/cmsde/tree/master/hw5}
 
-% \lstset{caption={Code for 1b}, label=lstex1b}
-% \lstinputlisting{exercise1b.py}
-
-% \lstset{caption={Code for 2g}, label=lstex2g}
-% \lstinputlisting{exercise2g.py}
+\lstset{caption={Final code}, label=lstex1b}
+\lstinputlisting{tf_mnist_lab.py}
 
 \end{document}

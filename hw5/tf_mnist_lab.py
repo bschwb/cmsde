@@ -4,7 +4,7 @@ import numpy as np
 from tensorflow.examples.tutorials.mnist import input_data
 mnist = input_data.read_data_sets("/tmp/data/", one_hot = True)
 
-K = 500
+K = 600
 M = 10000
 dt = 1
 N = 100
