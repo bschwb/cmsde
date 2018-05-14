@@ -16,7 +16,7 @@ label = tf.placeholder(dtype = tf.float32, shape = (None, 10))
 
 def neural_network_model(inp):
     initializer = tf.initializers.random_normal
-    activation_fcn_1 = tf.nn.sigmoid
+    activation_fcn_1 = tf.nn.relu
     activation_fcn_output = None
     num_output_nodes = 10
 
